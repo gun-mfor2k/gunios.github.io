@@ -291,13 +291,12 @@
   </div>
 </div>
 
-<!-- SDK SUPABASE -->
+<!-- SDK SUPABASE VÀ XỬ LÝ AUTH QUA REST API -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://ehrlnhicqvhkspcjlehd.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL';
   
-  // Thêm cấu hình chống lỗi mạng ngầm trên thiết bị di động
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
       persistSession: true,
@@ -336,6 +335,7 @@
       : 'Chưa có tài khoản? <a onclick="toggleAuthMode(true)">Đăng ký ngay</a>';
   }
 
+  // Sử dụng fetch trực tiếp qua REST API để tránh hoàn toàn lỗi Load failed của SDK trên mobile
   async function handleAuthSubmit() {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value.trim();
@@ -345,27 +345,40 @@
       return;
     }
 
+    const endpoint = isSignUpMode ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
+    const payload = isSignUpMode 
+      ? { email, password }
+      : { email, password };
+
     try {
-      if (isSignUpMode) {
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) {
-          alert("Lỗi đăng ký: " + error.message);
-        } else {
-          alert("Đăng ký thành công! Bạn có thể đăng nhập ngay.");
-          closeAuthModal();
-        }
+      const response = await fetch(`${SUPABASE_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert("Lỗi: " + (result.msg || result.message || result.error_description || JSON.stringify(result)));
       } else {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-          alert("Đăng nhập thất bại: " + error.message);
+        if (isSignUpMode) {
+          alert("Đăng ký thành công! Vui lòng kiểm tra email xác nhận.");
         } else {
           alert("Đăng nhập thành công!");
-          closeAuthModal();
+          // Lưu token thủ công nếu cần
+          if (result.access_token) {
+            localStorage.setItem('sb_token', result.access_token);
+          }
           checkUserSession();
         }
+        closeAuthModal();
       }
     } catch (err) {
-      alert("Lỗi kết nối ngoại lệ: " + (err.message || err));
+      alert("Lỗi kết nối mạng: " + err.message);
     }
   }
 
@@ -460,4 +473,3 @@
 
 </body>
 </html>
-
