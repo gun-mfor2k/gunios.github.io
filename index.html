@@ -163,6 +163,12 @@
     color: #fff; font-size: 14px; outline: none;
   }
   .form-input:focus { border-color: var(--accent1); }
+  
+  .privacy-note {
+    font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; line-height: 1.4;
+  }
+  .privacy-note a { color: var(--accent2); text-decoration: underline; }
+
   .switch-auth {
     font-size: 13px; color: var(--muted); text-align: center; margin-top: 14px;
   }
@@ -175,6 +181,7 @@
     border-top: 1px solid var(--border);
     margin-top: 20px;
   }
+  footer a { color: var(--accent2); text-decoration: none; }
 
   @media (max-width: 480px) {
     .profile h1 { font-size: 22px; }
@@ -253,7 +260,7 @@
 
 <footer>
   © 2026 <strong>Make by GuniOS</strong> • Trang chia sẻ IPA & app tự phát triển<br>
-  <span style="font-size:12px; opacity:.7">Vui lòng không re-up khi chưa xin phép</span>
+  <a href="privacy.html" target="_blank" style="font-size:12px;">Chính sách bảo vệ dữ liệu cá nhân</a>
 </footer>
 
 <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
@@ -274,6 +281,10 @@
 
     <button class="btn" id="btn-submit-auth" onclick="handleAuthSubmit()">Đăng Nhập</button>
 
+    <div class="privacy-note" id="privacy-note-box" style="display: none;">
+      Bằng việc đăng ký, bạn đồng ý với <a href="privacy.html" target="_blank">Chính sách bảo vệ dữ liệu cá nhân</a>.
+    </div>
+
     <div class="switch-auth" id="switch-auth-box">
       Chưa có tài khoản? <a onclick="toggleAuthMode(true)">Đăng ký ngay</a>
     </div>
@@ -283,18 +294,15 @@
 <!-- SDK SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Khởi tạo Supabase Client
   const SUPABASE_URL = 'https://ehrlnhicqvhkspcjlehd.supabase.co';
-  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL'; // Thay Publishable key thực tế của bạn
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL'; // Thay thế bằng Publishable key thực tế của bạn
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   let isSignUpMode = false;
   let currentUser = null;
 
-  // Xử lý đóng / mở Modal
   function openAuthModal() {
     if (currentUser) {
-      // Nếu đã đăng nhập thì bấm vào nút sẽ Đăng xuất
       supabaseClient.auth.signOut().then(() => {
         alert("Đã đăng xuất tài khoản!");
         checkUserSession();
@@ -311,14 +319,15 @@
   function toggleAuthMode(signUp) {
     isSignUpMode = signUp;
     document.getElementById('modal-title-text').innerText = signUp ? "Đăng Ký Tài Khoản" : "Đăng Nhập";
-    document.getElementById('modal-sub-text').innerText = signUp ? "Tạo tài khoản mới để tải file IPA" : "Đăng nhập tài khoản để tiếp tục";
+    document.getElementById('modal-sub-text').innerText = signUp ? "Tạo tài khoản mới hệ thống" : "Đăng nhập tài khoản để tiếp tục";
     document.getElementById('btn-submit-auth').innerText = signUp ? "Đăng Ký" : "Đăng Nhập";
+    document.getElementById('privacy-note-box').style.display = signUp ? "block" : "none";
+
     document.getElementById('switch-auth-box').innerHTML = signUp 
       ? 'Đã có tài khoản? <a onclick="toggleAuthMode(false)">Đăng nhập</a>'
       : 'Chưa có tài khoản? <a onclick="toggleAuthMode(true)">Đăng ký ngay</a>';
   }
 
-  // Xử lý gửi Form Đăng nhập / Đăng ký tới Supabase Auth
   async function handleAuthSubmit() {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value.trim();
@@ -329,14 +338,14 @@
     }
 
     if (isSignUpMode) {
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      const { error } = await supabaseClient.auth.signUp({ email, password });
       if (error) alert("Lỗi đăng ký: " + error.message);
       else {
         alert("Đăng ký thành công! Vui lòng kiểm tra email để xác thực.");
         closeAuthModal();
       }
     } else {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) alert("Đăng nhập thất bại: " + error.message);
       else {
         alert("Đăng nhập thành công!");
@@ -346,7 +355,6 @@
     }
   }
 
-  // Kiểm tra phiên làm việc người dùng
   async function checkUserSession() {
     const { data: { session } } = await supabaseClient.auth.getSession();
     const btnAuth = document.getElementById('btn-auth-action');
@@ -366,43 +374,71 @@
 
   checkUserSession();
 
-  // --- RENDER DỮ LIỆU APPS ---
-  const appsGame = [
-    { name: "Quack Bag: Duck Mafia", icon: "https://cdn.upanhlaylink.com/i/YrkXFAmI.png", desc: "Chiến thuật, bypass QC, Menu mod all chức năng.", ipa: "https://drive.google.com/file/d/1OGUkWThmLIJF08oVov3uEnUQfACGOmnL/view?usp=drivesdk", version: "1.292.267", size: "128 MB" },
-    { name: "Game B - God Mode", icon: "https://via.placeholder.com/120", desc: "Game bắn súng, bật god mode, không giới hạn đạn.", ipa: "https://link-cua-ban.com/gameB.ipa", version: "1.5.2", size: "620 MB" }
-  ];
-  const appsUtil = [
-    { name: "Youtube Plus", icon: "https://cdn.upanhlaylink.com/i/i1WpvcYd.png", desc: "Không quảng cáo, phát nền.", ipa: "https://drive.google.com/file/d/1U6vSVy3tdadL8S2HSHTc8xNxJ-P4OXs5/view?usp=drivesdk", version: "21.39.4", size: "381 MB" },
-    { name: "ShadowRocket", icon: "https://cdn.upanhlaylink.com/i/MchXQLgy.png", desc: "Công cụ quản lý kết nối mạng, VPN.", ipa: "https://drive.google.com/file/d/1jC_JY__yNmEP6kbzQQg_l8onZx0gHExP/view?usp=drivesdk", version: "2.2.54", size: "16 MB" }
-  ];
-  const appsTool = [
-    { name: "Công Cụ 1", icon: "https://via.placeholder.com/120", desc: "Công cụ dọn dẹp bộ nhớ, tối ưu hệ thống cho iOS.", ipa: "https://link-cua-ban.com/tool1.ipa", version: "2.0.1", size: "15 MB" }
-  ];
+  // --- TẢI DỮ LIỆU APPS TỪ SUPABASE DATABASE ---
+  async function loadAppsFromSupabase() {
+    try {
+      const { data: apps, error } = await supabaseClient
+        .from('apps')
+        .select('*');
+
+      if (error) {
+        console.error("Lỗi tải app:", error.message);
+        return;
+      }
+
+      if (!apps || apps.length === 0) {
+        document.getElementById('grid-game').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
+        document.getElementById('grid-util').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
+        document.getElementById('grid-tool').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
+        return;
+      }
+
+      const appsGame = apps.filter(app => app.category === 'game');
+      const appsUtil = apps.filter(app => app.category === 'util');
+      const appsTool = apps.filter(app => app.category === 'tool');
+
+      renderApps(appsGame, 'grid-game');
+      renderApps(appsUtil, 'grid-util');
+      renderApps(appsTool, 'grid-tool');
+
+    } catch (err) {
+      console.error("Lỗi kết nối database:", err);
+    }
+  }
 
   function renderApps(list, containerId) {
     const el = document.getElementById(containerId);
-    if (!list.length) { el.innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào trong mục này.</p>'; return; }
+    if (!list || !list.length) {
+      el.innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào trong mục này.</p>';
+      return;
+    }
     el.innerHTML = list.map(app => `
       <div class="card">
         <div class="card-top">
-          <img src="${app.icon}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
+          <img src="${app.icon || 'https://via.placeholder.com/120'}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
           <div class="app-info">
             <div class="app-name">${app.name}</div>
-            <div class="app-meta"><span>📦 ${app.size}</span> <span>🔖 v${app.version}</span></div>
+            <div class="app-meta">
+              <span>📦 ${app.size || 'N/A'}</span>
+              <span>🔖 v${app.version || '1.0'}</span>
+            </div>
           </div>
         </div>
-        <p class="app-desc">${app.desc}</p>
+        <p class="app-desc">${app.desc || ''}</p>
         <a href="${app.ipa}" class="btn" target="_blank" rel="noopener">
-          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
           Tải IPA
         </a>
       </div>
     `).join('');
   }
 
-  renderApps(appsGame, 'grid-game');
-  renderApps(appsUtil, 'grid-util');
-  renderApps(appsTool, 'grid-tool');
+  loadAppsFromSupabase();
 </script>
+
 </body>
 </html>
