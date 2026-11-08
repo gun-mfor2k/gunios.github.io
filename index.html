@@ -142,7 +142,6 @@
 
 <header class="profile">
   <div class="profile-inner">
-    <!-- Đã thêm translate="no" chống trình duyệt dịch tên file -->
     <img src="https://cdn.upanhlaylink.com/i/Y8KXf3LF.png" alt="Logo" class="avatar" translate="no">
     <h1>GuniOS</h1>
     <p class="tagline">Dev iOS • Chia sẻ IPA mod & app tự phát triển</p>
@@ -206,98 +205,107 @@
   <span style="font-size:12px; opacity:.7">Vui lòng không re-up khi chưa xin phép</span>
 </footer>
 
+<!-- Nhúng thư viện Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const appsGame = [
-  {
-    name: "Quack Bag: Duck Mafia",
-    icon: "https://cdn.upanhlaylink.com/i/YrkXFAmI.png",
-    desc: "Chiến thuật, bypass QC, Menu mod all chức năng.",
-    ipa: "https://drive.google.com/file/d/1OGUkWThmLIJF08oVov3uEnUQfACGOmnL/view?usp=drivesdk",
-    version: "1.292.267",
-    size: "128 MB"
-  },
-  {
-    name: "Game B - God Mode",
-    icon: "https://via.placeholder.com/120",
-    desc: "Game bắn súng, bật god mode, không giới hạn đạn.",
-    ipa: "https://link-cua-ban.com/gameB.ipa",
-    version: "1.5.2",
-    size: "620 MB"
-  },
-];
+  // Cấu hình kết nối Supabase
+  const SUPABASE_URL = 'https://ehrlnhicqvhkspcjlehd.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL'; // Thay thế bằng Publishable key thực tế của bạn
+  
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  console.log("Kết nối Supabase thành công!");
 
-const appsUtil = [
-  {
-    name: "Youtube Plus",
-    icon: "https://cdn.upanhlaylink.com/i/i1WpvcYd.png",
-    desc: "Không quảng cáo, phát nền.",
-    ipa: "https://drive.google.com/file/d/1U6vSVy3tdadL8S2HSHTc8xNxJ-P4OXs5/view?usp=drivesdk",
-    version: "21.39.4",
-    size: "381 MB"
-  },
-  {
-    name: "ShadowRocket",
-    icon: "https://cdn.upanhlaylink.com/i/MchXQLgy.png",
-    desc: "Công cụ quản lý kết nối mạng, VPN.",
-    ipa: "https://drive.google.com/file/d/1jC_JY__yNmEP6kbzQQg_l8onZx0gHExP/view?usp=drivesdk",
-    version: "2.2.54",
-    size: "16 MB",
-  },
-];
+  const appsGame = [
+    {
+      name: "Quack Bag: Duck Mafia",
+      icon: "https://cdn.upanhlaylink.com/i/YrkXFAmI.png",
+      desc: "Chiến thuật, bypass QC, Menu mod all chức năng.",
+      ipa: "https://drive.google.com/file/d/1OGUkWThmLIJF08oVov3uEnUQfACGOmnL/view?usp=drivesdk",
+      version: "1.292.267",
+      size: "128 MB"
+    },
+    {
+      name: "Game B - God Mode",
+      icon: "https://via.placeholder.com/120",
+      desc: "Game bắn súng, bật god mode, không giới hạn đạn.",
+      ipa: "https://link-cua-ban.com/gameB.ipa",
+      version: "1.5.2",
+      size: "620 MB"
+    },
+  ];
 
-const appsTool = [
-  {
-    name: "Công Cụ 1",
-    icon: "https://via.placeholder.com/120",
-    desc: "Công cụ dọn dẹp bộ nhớ, tối ưu hệ thống cho iOS.",
-    ipa: "https://link-cua-ban.com/tool1.ipa",
-    version: "2.0.1",
-    size: "15 MB"
-  },
-  {
-    name: "Công Cụ 2",
-    icon: "https://via.placeholder.com/120",
-    desc: "Công cụ quản lý file, giải nén trên iOS.",
-    ipa: "https://link-cua-ban.com/tool2.ipa",
-    version: "1.8.4",
-    size: "45 MB"
-  },
-];
+  const appsUtil = [
+    {
+      name: "Youtube Plus",
+      icon: "https://cdn.upanhlaylink.com/i/i1WpvcYd.png",
+      desc: "Không quảng cáo, phát nền.",
+      ipa: "https://drive.google.com/file/d/1U6vSVy3tdadL8S2HSHTc8xNxJ-P4OXs5/view?usp=drivesdk",
+      version: "21.39.4",
+      size: "381 MB"
+    },
+    {
+      name: "ShadowRocket",
+      icon: "https://cdn.upanhlaylink.com/i/MchXQLgy.png",
+      desc: "Công cụ quản lý kết nối mạng, VPN.",
+      ipa: "https://drive.google.com/file/d/1jC_JY__yNmEP6kbzQQg_l8onZx0gHExP/view?usp=drivesdk",
+      version: "2.2.54",
+      size: "16 MB",
+    },
+  ];
 
-function renderApps(list, containerId) {
-  const el = document.getElementById(containerId);
-  if (!list.length) {
-    el.innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào trong mục này.</p>';
-    return;
-  }
-  el.innerHTML = list.map(app => `
-    <div class="card">
-      <div class="card-top">
-        <img src="${app.icon}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
-        <div class="app-info">
-          <div class="app-name">${app.name}</div>
-          <div class="app-meta">
-            <span>📦 ${app.size}</span>
-            <span>🔖 v${app.version}</span>
+  const appsTool = [
+    {
+      name: "Công Cụ 1",
+      icon: "https://via.placeholder.com/120",
+      desc: "Công cụ dọn dẹp bộ nhớ, tối ưu hệ thống cho iOS.",
+      ipa: "https://link-cua-ban.com/tool1.ipa",
+      version: "2.0.1",
+      size: "15 MB"
+    },
+    {
+      name: "Công Cụ 2",
+      icon: "https://via.placeholder.com/120",
+      desc: "Công cụ quản lý file, giải nén trên iOS.",
+      ipa: "https://link-cua-ban.com/tool2.ipa",
+      version: "1.8.4",
+      size: "45 MB"
+    },
+  ];
+
+  function renderApps(list, containerId) {
+    const el = document.getElementById(containerId);
+    if (!list.length) {
+      el.innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào trong mục này.</p>';
+      return;
+    }
+    el.innerHTML = list.map(app => `
+      <div class="card">
+        <div class="card-top">
+          <img src="${app.icon}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
+          <div class="app-info">
+            <div class="app-name">${app.name}</div>
+            <div class="app-meta">
+              <span>📦 ${app.size}</span>
+              <span>🔖 v${app.version}</span>
+            </div>
           </div>
         </div>
+        <p class="app-desc">${app.desc}</p>
+        <a href="${app.ipa}" class="btn" target="_blank" rel="noopener">
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Tải IPA
+        </a>
       </div>
-      <p class="app-desc">${app.desc}</p>
-      <a href="${app.ipa}" class="btn" target="_blank" rel="noopener">
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Tải IPA
-      </a>
-    </div>
-  `).join('');
-}
+    `).join('');
+  }
 
-renderApps(appsGame, 'grid-game');
-renderApps(appsUtil, 'grid-util');
-renderApps(appsTool, 'grid-tool');
+  renderApps(appsGame, 'grid-game');
+  renderApps(appsUtil, 'grid-util');
+  renderApps(appsTool, 'grid-tool');
 </script>
 
 </body>
