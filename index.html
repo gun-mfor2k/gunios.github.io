@@ -140,11 +140,10 @@
 </head>
 <body>
 
-<!-- ============ HEADER: LOGO + THÔNG TIN LIÊN HỆ ============ -->
 <header class="profile">
   <div class="profile-inner">
-    <!-- Đảm bảo tên file ảnh đại diện trên Github là logo.png (viết thường, không dấu) -->
-    <img src="logo.png" alt="Logo" class="avatar">
+    <!-- Đã thêm translate="no" chống trình duyệt dịch tên file -->
+    <img src="logo.png" alt="Logo" class="avatar" translate="no">
     <h1>GuniOS</h1>
     <p class="tagline">Dev iOS • Chia sẻ IPA mod & app tự phát triển</p>
 
@@ -169,7 +168,6 @@
   </div>
 </header>
 
-<!-- ============ KHO IPA MOD GAME ============ -->
 <section class="section">
   <div class="section-header">
     <div class="section-icon icon-game">🎮</div>
@@ -181,7 +179,6 @@
   <div class="grid" id="grid-game"></div>
 </section>
 
-<!-- ============ KHO ỨNG DỤNG TIỆN ÍCH ============ -->
 <section class="section">
   <div class="section-header">
     <div class="section-icon icon-util">📱</div>
@@ -193,7 +190,6 @@
   <div class="grid" id="grid-util"></div>
 </section>
 
-<!-- ============ KHO CÔNG CỤ TIỆN ÍCH ============ -->
 <section class="section">
   <div class="section-header">
     <div class="section-icon icon-tool">🛠️</div>
@@ -211,10 +207,6 @@
 </footer>
 
 <script>
-/* ============================================================
-   👉 DANH SÁCH APP (Thêm/Sửa thông tin app tại đây)
-   ============================================================ */
-
 const appsGame = [
   {
     name: "Quack Bag: Duck Mafia",
@@ -272,10 +264,6 @@ const appsTool = [
   },
 ];
 
-/* ============================================================
-   RENDER GIAO DIỆN TỰ ĐỘNG
-   ============================================================ */
-
 function renderApps(list, containerId) {
   const el = document.getElementById(containerId);
   if (!list.length) {
@@ -285,7 +273,7 @@ function renderApps(list, containerId) {
   el.innerHTML = list.map(app => `
     <div class="card">
       <div class="card-top">
-        <img src="${app.icon}" alt="${app.name}" class="app-icon" loading="lazy">
+        <img src="${app.icon}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
         <div class="app-info">
           <div class="app-name">${app.name}</div>
           <div class="app-meta">
