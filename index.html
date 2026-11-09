@@ -1,461 +1,807 @@
 <!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kho IPA - Tải App & Game Mod</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#0a0e1a">
+
+<title>GuniOS - Kho IPA</title>
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-  :root {
-    --bg: #0a0e1a;
-    --card: #151b2e;
-    --border: #232b45;
-    --text: #e5e9f0;
-    --muted: #8b95b0;
-    --accent1: #6366f1;
-    --accent2: #a855f7;
-    --accent3: #ec4899;
-  }
-  body { background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
 
-  /* ===== HEADER PROFILE ===== */
-  .profile {
-    background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #831843 100%);
-    padding: 40px 20px 30px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .profile::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(99,102,241,.4), transparent 60%),
-                radial-gradient(circle at 70% 80%, rgba(236,72,153,.3), transparent 60%);
-    pointer-events: none;
-  }
-  .profile-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-  .avatar {
-    width: 110px; height: 110px; border-radius: 50%;
-    border: 4px solid rgba(255,255,255,.9);
-    box-shadow: 0 8px 32px rgba(0,0,0,.5);
-    object-fit: cover; margin: 0 auto 18px; display: block;
-    background: #fff;
-  }
-  .profile h1 { font-size: 26px; margin-bottom: 6px; letter-spacing: .3px; }
-  .profile .tagline { color: rgba(255,255,255,.85); font-size: 14px; margin-bottom: 18px; }
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 
-  /* Nút Auth góc trên */
-  .top-bar {
-    position: absolute; top: 15px; right: 15px; z-index: 10;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .auth-btn {
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.3);
-    color: #fff; padding: 7px 14px; border-radius: 20px;
-    font-size: 13px; font-weight: 600; cursor: pointer;
-    transition: all .2s;
-  }
-  .auth-btn:hover { background: rgba(255,255,255,.3); }
-  .user-badge { font-size: 13px; color: #a855f7; font-weight: 600; display: none; }
+:root{--bg:#0a0e1a;--card:#151b2e;--border:#232b45;--text:#e5e9f0;--muted:#8b95b0;--a:#6366f1;--b:#a855f7}
 
-  /* Liên hệ */
-  .contacts {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-  }
-  .contact-item {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(10px);
-    padding: 9px 16px; border-radius: 30px;
-    color: #fff; text-decoration: none; font-size: 13px;
-    border: 1px solid rgba(255,255,255,.2);
-    transition: all .2s;
-  }
-  .contact-item:hover { background: rgba(255,255,255,.25); transform: translateY(-2px); }
-  .contact-item svg { width: 16px; height: 16px; }
+body{background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
 
-  /* ===== SECTION ===== */
-  .section { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-  .section-header {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 24px; padding-bottom: 14px;
-    border-bottom: 2px solid var(--border);
-  }
-  .section-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px; flex-shrink: 0;
-  }
-  .icon-game { background: linear-gradient(135deg, #ef4444, #f97316); }
-  .icon-util { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
-  .icon-tool { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+button,input{font:inherit}
 
-  .section-title { font-size: 22px; font-weight: 700; }
-  .section-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.profile{position:relative;text-align:center;padding:45px 20px 30px;background:linear-gradient(135deg,#1e1b4b,#4c1d95 50%,#831843)}
 
-  /* ===== GRID ===== */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 18px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    display: flex; flex-direction: column; gap: 12px;
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent1);
-    box-shadow: 0 12px 32px rgba(99,102,241,.25);
-  }
-  .card-top { display: flex; gap: 12px; align-items: flex-start; }
-  .app-icon {
-    width: 62px; height: 62px; border-radius: 14px;
-    object-fit: cover; flex-shrink: 0;
-    background: #232b45;
-  }
-  .app-info { flex: 1; min-width: 0; }
-  .app-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
-  .app-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
-  .app-meta span { white-space: nowrap; }
-  .app-desc { font-size: 13px; color: var(--muted); line-height: 1.5; flex: 1; }
+.profile-inner{max-width:700px;margin:auto}
 
-  .btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    text-decoration: none; color: #fff; font-weight: 600; font-size: 14px;
-    padding: 11px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    transition: opacity .2s, transform .1s;
-    cursor: pointer; border: none; width: 100%;
-  }
-  .btn:hover { opacity: .9; }
-  .btn:active { transform: scale(.98); }
-  .btn svg { width: 16px; height: 16px; }
+.avatar{width:100px;height:100px;border-radius:50%;border:4px solid white;object-fit:cover;margin-bottom:15px}
 
-  /* ===== MODAL AUTH ===== */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.75);
-    backdrop-filter: blur(5px); display: none;
-    align-items: center; justify-content: center; z-index: 1000; padding: 20px;
-  }
-  .modal-box {
-    background: var(--card); border: 1px solid var(--border);
-    width: 100%; max-width: 380px; border-radius: 20px; padding: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.6); position: relative;
-  }
-  .modal-close {
-    position: absolute; top: 16px; right: 16px; background: none;
-    border: none; color: var(--muted); font-size: 20px; cursor: pointer;
-  }
-  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
-  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; text-align: center; }
-  .form-group { margin-bottom: 14px; }
-  .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-  .form-input {
-    width: 100%; padding: 12px; border-radius: 10px;
-    background: #0d1222; border: 1px solid var(--border);
-    color: #fff; font-size: 14px; outline: none;
-  }
-  .form-input:focus { border-color: var(--accent1); }
-  
-  .privacy-note {
-    font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; line-height: 1.4;
-  }
-  .privacy-note a { color: var(--accent2); text-decoration: underline; }
+.profile h1{font-size:26px}
 
-  .switch-auth {
-    font-size: 13px; color: var(--muted); text-align: center; margin-top: 14px;
-  }
-  .switch-auth a { color: var(--accent2); text-decoration: none; font-weight: 600; cursor: pointer; }
+.tagline{font-size:14px;color:#ddd;margin:5px 0 18px}
 
-  /* ===== FOOTER ===== */
-  footer {
-    text-align: center; padding: 30px 20px;
-    color: var(--muted); font-size: 13px;
-    border-top: 1px solid var(--border);
-    margin-top: 20px;
-  }
-  footer a { color: var(--accent2); text-decoration: none; }
+.top-bar{position:absolute;right:15px;top:15px;display:flex;gap:10px;align-items:center}
 
-  @media (max-width: 480px) {
-    .profile h1 { font-size: 22px; }
-    .avatar { width: 90px; height: 90px; }
-    .section-title { font-size: 19px; }
-    .grid { grid-template-columns: 1fr; }
-  }
+.auth-btn{background:#ffffff25;border:1px solid #ffffff55;color:white;padding:8px 15px;border-radius:20px;cursor:pointer}
+
+.user-badge{display:none;font-size:12px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.contacts{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+
+.contact-item{color:white;text-decoration:none;padding:9px 15px;border:1px solid #ffffff40;border-radius:25px;background:#ffffff20;font-size:13px}
+
+.section{max-width:1200px;margin:auto;padding:35px 20px}
+
+.section-header{display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--border);padding-bottom:15px;margin-bottom:22px}
+
+.section-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:23px}
+
+.icon-game{background:linear-gradient(135deg,#ef4444,#f97316)}
+
+.icon-util{background:linear-gradient(135deg,#3b82f6,#06b6d4)}
+
+.icon-tool{background:linear-gradient(135deg,#8b5cf6,#ec4899)}
+
+.section-title{font-size:22px;font-weight:700}
+
+.section-sub{font-size:13px;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+
+.card-top{display:flex;gap:12px;align-items:center}
+
+.app-icon{width:62px;height:62px;border-radius:14px;object-fit:cover;background:var(--border)}
+
+.app-info{min-width:0;flex:1}
+
+.app-name{font-size:15px;font-weight:700;overflow-wrap:anywhere}
+
+.app-meta{font-size:11px;color:var(--muted);display:flex;gap:10px}
+
+.app-desc{font-size:13px;color:var(--muted);overflow-wrap:anywhere;white-space:pre-wrap}
+
+.btn{display:flex;justify-content:center;align-items:center;padding:12px;border:0;border-radius:10px;color:white;text-decoration:none;background:linear-gradient(135deg,var(--a),var(--b));font-weight:600;cursor:pointer;width:100%}
+
+.btn:disabled{opacity:.5}
+
+.modal-overlay{position:fixed;inset:0;background:#000b;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
+
+.modal-overlay.open{display:flex}
+
+.modal-box{position:relative;width:100%;max-width:390px;padding:25px;background:var(--card);border:1px solid var(--border);border-radius:22px}
+
+.modal-close{position:absolute;right:15px;top:12px;background:none;border:0;color:var(--muted);font-size:23px;cursor:pointer}
+
+.modal-title{text-align:center;font-size:21px;font-weight:700}
+
+.modal-sub{text-align:center;color:var(--muted);font-size:13px;margin:5px 0 22px}
+
+.form-group{margin-bottom:15px}
+
+.form-group label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+
+.form-input{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px;background:#0d1222;color:white;outline:none;font-size:16px}
+
+.form-input:focus{border-color:var(--a)}
+
+.privacy-note,.switch-auth,.status-message{text-align:center;font-size:12px;margin-top:13px;color:var(--muted)}
+
+.privacy-note a,.switch-auth a{color:var(--b);cursor:pointer}
+
+.status-message{overflow-wrap:anywhere}
+
+footer{text-align:center;padding:30px 15px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;margin-top:20px}
+
+footer a{color:var(--b)}
+
+@media(max-width:480px){.grid{grid-template-columns:1fr}.section-title{font-size:19px}.avatar{width:90px;height:90px}}
+
 </style>
+
 </head>
+
 <body>
 
 <header class="profile">
+
   <div class="top-bar">
-    <span class="user-badge" id="user-email"></span>
-    <button class="auth-btn" id="btn-auth-action" onclick="openAuthModal()">Đăng nhập</button>
+
+    <span id="user-email" class="user-badge"></span>
+
+    <button class="auth-btn" id="btn-auth-action">Đăng nhập</button>
+
   </div>
 
   <div class="profile-inner">
-    <img src="https://cdn.upanhlaylink.com/i/Y8KXf3LF.png" alt="Logo" class="avatar" translate="no">
+
+    <img class="avatar" src="https://cdn.upanhlaylink.com/i/Y8KXf3LF.png" alt="GuniOS">
+
     <h1>GuniOS</h1>
-    <p class="tagline">Dev iOS • Chia sẻ IPA mod & app tự phát triển</p>
+
+    <p class="tagline">Dev iOS • Chia sẻ IPA mod &amp; app tự phát triển</p>
 
     <div class="contacts">
-      <a href="https://t.me/gunparh" class="contact-item" target="_blank">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
-        Telegram
-      </a>
-      <a href="https://www.tiktok.com/@gunios1412" class="contact-item" target="_blank">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6 2 11c0 2.9 1.6 5.5 4 7.1V22l3.6-2c.8.2 1.6.3 2.4.3 5.5 0 10-4 10-9s-4.5-9-10-9z"/></svg>
-        TikTok
-      </a>
-      <a href="https://facebook.com/username" class="contact-item" target="_blank">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-        Facebook
-      </a>
-      <a href="https://youtube.com/@thiyt.ios111?si=y4hXKxTJKcjutzfH" class="contact-item" target="_blank">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Youtube
-      </a>
+
+      <a class="contact-item" href="https://t.me/gunparh" target="_blank" rel="noopener">Telegram</a>
+
+      <a class="contact-item" href="https://www.tiktok.com/@gunios1412" target="_blank" rel="noopener">TikTok</a>
+
+      <a class="contact-item" href="https://facebook.com/username" target="_blank" rel="noopener">Facebook</a>
+
+      <a class="contact-item" href="https://youtube.com/@thiyt.ios111?si=y4hXKxTJKcjutzfH" target="_blank" rel="noopener">Youtube</a>
+
     </div>
+
   </div>
+
 </header>
 
 <section class="section">
+
   <div class="section-header">
+
     <div class="section-icon icon-game">🎮</div>
-    <div>
-      <div class="section-title">Kho IPA Mod Game</div>
-      <div class="section-sub">Game đã mod, hack, unlimited</div>
-    </div>
+
+    <div><div class="section-title">Kho IPA Mod Game</div><div class="section-sub">Game đã mod, hack, unlimited</div></div>
+
   </div>
-  <div class="grid" id="grid-game"></div>
+
+  <div class="grid" id="grid-game"><p class="status-message">Đang tải...</p></div>
+
 </section>
 
 <section class="section">
+
   <div class="section-header">
+
     <div class="section-icon icon-util">📱</div>
-    <div>
-      <div class="section-title">Kho Ứng Dụng Tiện Ích</div>
-      <div class="section-sub">App tiện ích, giải trí, mạng xã hội</div>
-    </div>
+
+    <div><div class="section-title">Kho Ứng Dụng Tiện Ích</div><div class="section-sub">App tiện ích, giải trí, mạng xã hội</div></div>
+
   </div>
-  <div class="grid" id="grid-util"></div>
+
+  <div class="grid" id="grid-util"><p class="status-message">Đang tải...</p></div>
+
 </section>
 
 <section class="section">
+
   <div class="section-header">
+
     <div class="section-icon icon-tool">🛠️</div>
-    <div>
-      <div class="section-title">Kho Công Cụ Tiện Ích</div>
-      <div class="section-sub">Công cụ chỉnh sửa, tối ưu, hệ thống</div>
-    </div>
+
+    <div><div class="section-title">Kho Công Cụ Tiện Ích</div><div class="section-sub">Công cụ chỉnh sửa, tối ưu, hệ thống</div></div>
+
   </div>
-  <div class="grid" id="grid-tool"></div>
+
+  <div class="grid" id="grid-tool"><p class="status-message">Đang tải...</p></div>
+
 </section>
 
 <footer>
-  © 2026 <strong>Make by GuniOS</strong> • Trang chia sẻ IPA & app tự phát triển<br>
-  <a href="privacy.html" target="_blank" style="font-size:12px;">Chính sách bảo vệ dữ liệu cá nhân</a>
+
+© 2026 <strong>Make by GuniOS</strong> • Trang chia sẻ IPA &amp; app tự phát triển<br>
+
+<a href="privacy.html" target="_blank" rel="noopener">Chính sách bảo vệ dữ liệu cá nhân</a>
+
 </footer>
 
-<!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
 <div class="modal-overlay" id="auth-modal">
+
   <div class="modal-box">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+
+    <button class="modal-close" id="modal-close">✕</button>
+
     <div class="modal-title" id="modal-title-text">Đăng Nhập</div>
+
     <div class="modal-sub" id="modal-sub-text">Đăng nhập tài khoản để tiếp tục</div>
-    
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="auth-email" class="form-input" placeholder="nhapemail@example.com">
-    </div>
-    <div class="form-group">
-      <label>Mật khẩu</label>
-      <input type="password" id="auth-password" class="form-input" placeholder="••••••••">
-    </div>
 
-    <button class="btn" id="btn-submit-auth" onclick="handleAuthSubmit()">Đăng Nhập</button>
+    <form id="auth-form">
 
-    <div class="privacy-note" id="privacy-note-box" style="display: none;">
-      Bằng việc đăng ký, bạn đồng ý với <a href="privacy.html" target="_blank">Chính sách bảo vệ dữ liệu cá nhân</a>.
+      <div class="form-group">
+
+        <label for="auth-email">Email</label>
+
+        <input class="form-input" id="auth-email" type="email" autocomplete="email" placeholder="nhapemail@example.com" required>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="auth-password">Mật khẩu</label>
+
+        <input class="form-input" id="auth-password" type="password" minlength="6" autocomplete="current-password" placeholder="Ít nhất 6 ký tự" required>
+
+      </div>
+
+      <button class="btn" id="btn-submit-auth" type="submit">Đăng Nhập</button>
+
+    </form>
+
+    <div class="privacy-note" id="privacy-note-box" hidden>
+
+      Bằng việc đăng ký, bạn đồng ý với <a href="privacy.html">Chính sách bảo vệ dữ liệu cá nhân</a>.
+
     </div>
 
     <div class="switch-auth" id="switch-auth-box">
-      Chưa có tài khoản? <a onclick="toggleAuthMode(true)">Đăng ký ngay</a>
+
+      Chưa có tài khoản? <a href="#" id="switch-auth-link">Đăng ký ngay</a>
+
     </div>
+
+    <div class="status-message" id="auth-status" aria-live="polite"></div>
+
   </div>
+
 </div>
 
-<!-- SDK SUPABASE CHÍNH THỨC -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://ehrlnhicqvhkspcjlehd.supabase.co';
-  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL';
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: false
-    }
+<script>
+
+'use strict';
+
+// Publishable key được phép sử dụng ở frontend.
+
+// KHÔNG BAO GIỜ sử dụng service_role key trong website.
+
+const SUPABASE_URL = 'https://ehrlnhicqvhkspcjlehd.supabase.co';
+
+const SUPABASE_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL';
+
+const $ = id => document.getElementById(id);
+
+let db = null;
+
+let currentUser = null;
+
+let isSignUpMode = false;
+
+function setStatus(message) {
+
+  $('auth-status').textContent = message || '';
+
+}
+
+function initializeSupabase() {
+
+  if (!window.supabase) {
+
+    console.error('Supabase SDK not loaded');
+
+    return false;
+
+  }
+
+  try {
+
+    db = window.supabase.createClient(
+
+      SUPABASE_URL,
+
+      SUPABASE_KEY,
+
+      {
+
+        auth: {
+
+          persistSession: true,
+
+          autoRefreshToken: true,
+
+          detectSessionInUrl: true
+
+        }
+
+      }
+
+    );
+
+    return true;
+
+  } catch (error) {
+
+    console.error(error);
+
+    return false;
+
+  }
+
+}
+
+function openAuthModal() {
+
+  if (currentUser) {
+
+    logoutUser();
+
+    return;
+
+  }
+
+  $('auth-modal').classList.add('open');
+
+  setStatus('');
+
+}
+
+function closeAuthModal() {
+
+  $('auth-modal').classList.remove('open');
+
+  setStatus('');
+
+}
+
+function toggleAuthMode(signUp) {
+
+  isSignUpMode = signUp;
+
+  $('modal-title-text').textContent = signUp ? 'Đăng Ký Tài Khoản' : 'Đăng Nhập';
+
+  $('modal-sub-text').textContent = signUp ? 'Tạo tài khoản mới hệ thống' : 'Đăng nhập tài khoản để tiếp tục';
+
+  $('btn-submit-auth').textContent = signUp ? 'Đăng Ký' : 'Đăng Nhập';
+
+  $('privacy-note-box').hidden = !signUp;
+
+  $('auth-password').autocomplete = signUp ? 'new-password' : 'current-password';
+
+  $('switch-auth-box').replaceChildren(
+
+    document.createTextNode(signUp ? 'Đã có tài khoản? ' : 'Chưa có tài khoản? ')
+
+  );
+
+  const link = document.createElement('a');
+
+  link.href = '#';
+
+  link.textContent = signUp ? 'Đăng nhập' : 'Đăng ký ngay';
+
+  link.addEventListener('click', event => {
+
+    event.preventDefault();
+
+    toggleAuthMode(!isSignUpMode);
+
   });
 
-  let isSignUpMode = false;
-  let currentUser = null;
+  $('switch-auth-box').appendChild(link);
 
-  function openAuthModal() {
-    if (currentUser) {
-      supabaseClient.auth.signOut().then(() => {
-        alert("Đã đăng xuất tài khoản!");
-        checkUserSession();
+  setStatus('');
+
+}
+
+function updateUserInterface() {
+
+  $('btn-auth-action').textContent = currentUser ? 'Đăng xuất' : 'Đăng nhập';
+
+  $('user-email').textContent = currentUser?.email || '';
+
+  $('user-email').style.display = currentUser ? 'inline' : 'none';
+
+}
+
+function explainError(error) {
+
+  const message = error?.message || String(error);
+
+  const lower = message.toLowerCase();
+
+  if (lower.includes('user already registered')) {
+
+    return 'Email đã được đăng ký. Hãy đăng nhập hoặc sử dụng email khác.';
+
+  }
+
+  if (lower.includes('signup is disabled')) {
+
+    return 'Chức năng đăng ký đang bị tắt trong Supabase.';
+
+  }
+
+  if (lower.includes('email rate limit') || lower.includes('too many requests')) {
+
+    return 'Quá nhiều yêu cầu. Hãy chờ rồi thử lại.';
+
+  }
+
+  if (lower.includes('load failed') || lower.includes('failed to fetch') || lower.includes('network')) {
+
+    return 'Không kết nối được Supabase. Kiểm tra mạng, DNS, Content Blocker và trạng thái project.';
+
+  }
+
+  return message;
+
+}
+
+async function handleAuthSubmit(event) {
+
+  event.preventDefault();
+
+  if (!db) {
+
+    setStatus('Supabase chưa sẵn sàng. Hãy tải lại trang.');
+
+    return;
+
+  }
+
+  const email = $('auth-email').value.trim();
+
+  const password = $('auth-password').value;
+
+  const button = $('btn-submit-auth');
+
+  if (!email || !password) {
+
+    setStatus('Vui lòng nhập email và mật khẩu.');
+
+    return;
+
+  }
+
+  if (password.length < 6) {
+
+    setStatus('Mật khẩu phải có ít nhất 6 ký tự.');
+
+    return;
+
+  }
+
+  button.disabled = true;
+
+  button.textContent = 'Đang xử lý...';
+
+  setStatus('');
+
+  try {
+
+    let result;
+
+    if (isSignUpMode) {
+
+      result = await db.auth.signUp({ email, password });
+
+    } else {
+
+      result = await db.auth.signInWithPassword({ email, password });
+
+    }
+
+    if (result.error) {
+
+      console.error('Supabase Auth error:', result.error);
+
+      setStatus(explainError(result.error));
+
+      return;
+
+    }
+
+    if (isSignUpMode) {
+
+      if (result.data.session) {
+
+        currentUser = result.data.user;
+
+        updateUserInterface();
+
+        closeAuthModal();
+
+        alert('Đăng ký thành công!');
+
+      } else {
+
+        closeAuthModal();
+
+        alert('Đăng ký đã được tiếp nhận. Vui lòng kiểm tra email để xác nhận tài khoản.');
+
+      }
+
+    } else {
+
+      currentUser = result.data.user;
+
+      updateUserInterface();
+
+      closeAuthModal();
+
+      alert('Đăng nhập thành công!');
+
+    }
+
+  } catch (error) {
+
+    console.error('Auth network error:', error);
+
+    setStatus(explainError(error));
+
+  } finally {
+
+    button.disabled = false;
+
+    button.textContent = isSignUpMode ? 'Đăng Ký' : 'Đăng Nhập';
+
+  }
+
+}
+
+async function logoutUser() {
+
+  try {
+
+    const { error } = await db.auth.signOut();
+
+    if (error) throw error;
+
+    currentUser = null;
+
+    updateUserInterface();
+
+    alert('Đã đăng xuất!');
+
+  } catch (error) {
+
+    alert('Lỗi đăng xuất: ' + explainError(error));
+
+  }
+
+}
+
+async function checkUserSession() {
+
+  const { data, error } = await db.auth.getSession();
+
+  if (error) throw error;
+
+  currentUser = data.session?.user || null;
+
+  updateUserInterface();
+
+}
+
+function safeUrl(value) {
+
+  try {
+
+    const url = new URL(value);
+
+    return ['https:', 'http:'].includes(url.protocol) ? url.href : null;
+
+  } catch {
+
+    return null;
+
+  }
+
+}
+
+function renderApps(apps, gridId) {
+
+  const grid = $(gridId);
+
+  grid.replaceChildren();
+
+  if (!apps.length) {
+
+    const empty = document.createElement('p');
+
+    empty.className = 'status-message';
+
+    empty.textContent = 'Chưa có app nào trong mục này.';
+
+    grid.appendChild(empty);
+
+    return;
+
+  }
+
+  apps.forEach(app => {
+
+    const card = document.createElement('article');
+
+    card.className = 'card';
+
+    const top = document.createElement('div');
+
+    top.className = 'card-top';
+
+    const icon = document.createElement('img');
+
+    icon.className = 'app-icon';
+
+    icon.loading = 'lazy';
+
+    icon.alt = app.name || 'App';
+
+    icon.src = safeUrl(app.icon) || 'https://via.placeholder.com/120';
+
+    const info = document.createElement('div');
+
+    info.className = 'app-info';
+
+    const name = document.createElement('div');
+
+    name.className = 'app-name';
+
+    name.textContent = app.name || 'Ứng dụng';
+
+    const meta = document.createElement('div');
+
+    meta.className = 'app-meta';
+
+    const size = document.createElement('span');
+
+    size.textContent = '📦 ' + (app.size || 'N/A');
+
+    const version = document.createElement('span');
+
+    version.textContent = '🔖 v' + (app.version || '1.0');
+
+    meta.append(size, version);
+
+    info.append(name, meta);
+
+    top.append(icon, info);
+
+    const desc = document.createElement('p');
+
+    desc.className = 'app-desc';
+
+    desc.textContent = app.desc || '';
+
+    const download = document.createElement('a');
+
+    download.className = 'btn';
+
+    download.textContent = '⬇ Tải IPA';
+
+    const ipa = safeUrl(app.ipa);
+
+    if (ipa) {
+
+      download.href = ipa;
+
+      download.target = '_blank';
+
+      download.rel = 'noopener noreferrer';
+
+    } else {
+
+      download.href = '#';
+
+      download.addEventListener('click', event => {
+
+        event.preventDefault();
+
+        alert('Đường dẫn IPA không hợp lệ.');
+
       });
-      return;
-    }
-    document.getElementById('auth-modal').style.display = 'flex';
-  }
 
-  function closeAuthModal() {
-    document.getElementById('auth-modal').style.display = 'none';
-  }
-
-  function toggleAuthMode(signUp) {
-    isSignUpMode = signUp;
-    document.getElementById('modal-title-text').innerText = signUp ? "Đăng Ký Tài Khoản" : "Đăng Nhập";
-    document.getElementById('modal-sub-text').innerText = signUp ? "Tạo tài khoản mới hệ thống" : "Đăng nhập tài khoản để tiếp tục";
-    document.getElementById('btn-submit-auth').innerText = signUp ? "Đăng Ký" : "Đăng Nhập";
-    document.getElementById('privacy-note-box').style.display = signUp ? "block" : "none";
-
-    document.getElementById('switch-auth-box').innerHTML = signUp 
-      ? 'Đã có tài khoản? <a onclick="toggleAuthMode(false)">Đăng nhập</a>'
-      : 'Chưa có tài khoản? <a onclick="toggleAuthMode(true)">Đăng ký ngay</a>';
-  }
-
-  async function handleAuthSubmit() {
-    const email = document.getElementById('auth-email').value.trim();
-    const password = document.getElementById('auth-password').value.trim();
-
-    if (!email || !password) {
-      alert("Vui lòng nhập đầy đủ Email và Mật khẩu!");
-      return;
     }
 
-    try {
-      if (isSignUpMode) {
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) {
-          alert("Lỗi đăng ký: " + error.message);
-        } else {
-          alert("Đăng ký thành công! Bạn có thể đăng nhập ngay.");
-          closeAuthModal();
-        }
-      } else {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-          alert("Đăng nhập thất bại: " + error.message);
-        } else {
-          alert("Đăng nhập thành công!");
-          closeAuthModal();
-          checkUserSession();
-        }
-      }
-    } catch (err) {
-      alert("Lỗi hệ thống: " + (err.message || err));
-    }
+    card.append(top, desc, download);
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+async function loadAppsFromSupabase() {
+
+  try {
+
+    const { data, error } = await db
+
+      .from('apps')
+
+      .select('*');
+
+    if (error) throw error;
+
+    const apps = data || [];
+
+    renderApps(apps.filter(a => a.category === 'game'), 'grid-game');
+
+    renderApps(apps.filter(a => a.category === 'util'), 'grid-util');
+
+    renderApps(apps.filter(a => a.category === 'tool'), 'grid-tool');
+
+  } catch (error) {
+
+    console.error('Database error:', error);
+
+    ['grid-game', 'grid-util', 'grid-tool'].forEach(id => {
+
+      const p = document.createElement('p');
+
+      p.className = 'status-message';
+
+      p.textContent = 'Không tải được ứng dụng. Kiểm tra bảng apps và quyền SELECT trong Supabase.';
+
+      $(id).replaceChildren(p);
+
+    });
+
   }
 
-  async function checkUserSession() {
-    try {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      const btnAuth = document.getElementById('btn-auth-action');
-      const userBadge = document.getElementById('user-email');
+}
 
-      if (session && session.user) {
-        currentUser = session.user;
-        btnAuth.innerText = "Đăng xuất";
-        userBadge.innerText = currentUser.email;
-        userBadge.style.display = "inline";
-      } else {
-        currentUser = null;
-        btnAuth.innerText = "Đăng nhập";
-        userBadge.style.display = "none";
-      }
-    } catch (e) {
-      console.error("Session check error:", e);
-    }
+async function startApp() {
+
+  $('btn-auth-action').addEventListener('click', openAuthModal);
+
+  $('modal-close').addEventListener('click', closeAuthModal);
+
+  $('auth-form').addEventListener('submit', handleAuthSubmit);
+
+  $('auth-modal').addEventListener('click', event => {
+
+    if (event.target === $('auth-modal')) closeAuthModal();
+
+  });
+
+  $('switch-auth-link').addEventListener('click', event => {
+
+    event.preventDefault();
+
+    toggleAuthMode(true);
+
+  });
+
+  if (!initializeSupabase()) {
+
+    alert('Không tải được Supabase SDK. Kiểm tra kết nối CDN.');
+
+    return;
+
   }
 
-  checkUserSession();
+  db.auth.onAuthStateChange((_event, session) => {
 
-  // --- TẢI DỮ LIỆU APPS TỪ SUPABASE DATABASE ---
-  async function loadAppsFromSupabase() {
-    try {
-      const { data: apps, error } = await supabaseClient
-        .from('apps')
-        .select('*');
+    currentUser = session?.user || null;
 
-      if (error) {
-        console.error("Lỗi tải app:", error.message);
-        return;
-      }
+    updateUserInterface();
 
-      if (!apps || apps.length === 0) {
-        document.getElementById('grid-game').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
-        document.getElementById('grid-util').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
-        document.getElementById('grid-tool').innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào.</p>';
-        return;
-      }
+  });
 
-      const appsGame = apps.filter(app => app.category === 'game');
-      const appsUtil = apps.filter(app => app.category === 'util');
-      const appsTool = apps.filter(app => app.category === 'tool');
+  try {
 
-      renderApps(appsGame, 'grid-game');
-      renderApps(appsUtil, 'grid-util');
-      renderApps(appsTool, 'grid-tool');
+    await checkUserSession();
 
-    } catch (err) {
-      console.error("Lỗi kết nối database:", err);
-    }
+  } catch (error) {
+
+    console.error('Session error:', error);
+
   }
 
-  function renderApps(list, containerId) {
-    const el = document.getElementById(containerId);
-    if (!list || !list.length) {
-      el.innerHTML = '<p style="color:#8b95b0;font-size:14px">Chưa có app nào trong mục này.</p>';
-      return;
-    }
-    el.innerHTML = list.map(app => `
-      <div class="card">
-        <div class="card-top">
-          <img src="${app.icon || 'https://via.placeholder.com/120'}" alt="${app.name}" class="app-icon" loading="lazy" translate="no">
-          <div class="app-info">
-            <div class="app-name">${app.name}</div>
-            <div class="app-meta">
-              <span>📦 ${app.size || 'N/A'}</span>
-              <span>🔖 v${app.version || '1.0'}</span>
-            </div>
-          </div>
-        </div>
-        <p class="app-desc">${app.desc || ''}</p>
-        <a href="${app.ipa}" class="btn" target="_blank" rel="noopener">
-          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Tải IPA
-        </a>
-      </div>
-    `).join('');
-  }
+  await loadAppsFromSupabase();
 
-  loadAppsFromSupabase();
+}
+
+document.addEventListener('DOMContentLoaded', startApp);
+
 </script>
 
 </body>
+
 </html>
