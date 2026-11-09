@@ -1,10 +1,12 @@
 
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090d18">
+<meta name="description" content="GuniOS - Kho ứng dụng IPA tự phát triển.">
 <title>GuniOS — IPA Store</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -111,6 +113,11 @@ header {
 
 .btn:hover {
     opacity: .85;
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
 }
 
 /* HERO */
@@ -246,7 +253,6 @@ header {
     display: block;
     width: 100%;
     border: 0;
-    text-decoration: none;
     text-align: center;
     color: white;
     background: linear-gradient(120deg, #795cff, #536fff);
@@ -293,12 +299,32 @@ footer strong {
     color: #a18cff;
 }
 
-/* MODAL */
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 18px 0;
+}
+
+.footer-links button {
+    background: none;
+    border: none;
+    color: #a99aff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.footer-links button:hover {
+    text-decoration: underline;
+}
+
+/* MODALS */
 
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, .75);
+    background: rgba(0, 0, 0, .78);
     backdrop-filter: blur(7px);
     display: none;
     align-items: center;
@@ -313,7 +339,9 @@ footer strong {
 
 .modal {
     width: 100%;
-    max-width: 410px;
+    max-width: 430px;
+    max-height: 90vh;
+    overflow: hidden;
     background: #141d30;
     border: 1px solid #34415d;
     border-radius: 20px;
@@ -323,20 +351,26 @@ footer strong {
 }
 
 @keyframes appear {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal h3 {
     font-size: 21px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .modal p {
     color: #b0bbcf;
     font-size: 14px;
     line-height: 1.75;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     overflow-wrap: anywhere;
 }
 
@@ -355,22 +389,22 @@ footer strong {
     border-color: var(--primary);
 }
 
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.modal-actions button {
-    flex: 1;
-}
-
 .modal-message {
     color: #a99aff;
     font-size: 12px;
     line-height: 1.6;
     margin: 5px 0 12px;
     min-height: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-actions button {
+    flex: 1;
 }
 
 .auth-switch {
@@ -383,6 +417,35 @@ footer strong {
 
 .auth-switch:hover {
     text-decoration: underline;
+}
+
+/* POLICY */
+
+.policy-modal {
+    max-width: 600px;
+}
+
+.policy-content {
+    max-height: 60vh;
+    overflow-y: auto;
+    color: #b0bbcf;
+    font-size: 13px;
+    line-height: 1.8;
+    padding-right: 7px;
+}
+
+.policy-content h4 {
+    color: white;
+    margin: 17px 0 5px;
+    font-size: 14px;
+}
+
+.policy-content ul {
+    padding-left: 20px;
+}
+
+.policy-content p {
+    margin-bottom: 10px;
 }
 
 .hidden {
@@ -432,6 +495,10 @@ footer strong {
     .app-desc {
         font-size: 12px;
     }
+
+    .modal {
+        padding: 20px;
+    }
 }
 </style>
 </head>
@@ -449,7 +516,8 @@ footer strong {
                 Đăng nhập
             </button>
 
-            <button id="logoutButton" class="btn btn-secondary hidden">
+            <button id="logoutButton"
+                class="btn btn-secondary hidden">
                 Đăng xuất
             </button>
         </div>
@@ -464,9 +532,9 @@ footer strong {
         <h1>Kho IPA <span>Tự Phát Triển</span></h1>
 
         <p>
-            Chào mừng đến với GuniOS. Đây là nơi giới thiệu và phân phối
-            những ứng dụng IPA được phát triển bởi GuniOS.
-            Đăng nhập để truy cập chức năng tải ứng dụng.
+            Chào mừng đến với GuniOS. Đây là nơi giới thiệu và
+            phân phối những ứng dụng IPA được phát triển bởi GuniOS.
+            Đăng nhập để sử dụng chức năng tải ứng dụng.
         </p>
     </section>
 
@@ -491,8 +559,20 @@ footer strong {
 
 <footer>
     <div class="container">
-        <strong>GuniOS</strong> — IPA Store<br>
-        Developed by @Gunios-mFor2k
+        <strong>GuniOS</strong> — IPA Store
+
+        <div class="footer-links">
+            <button type="button" onclick="openPolicy('privacy')">
+                Chính sách quyền riêng tư
+            </button>
+
+            <button type="button" onclick="openPolicy('safety')">
+                Chính sách an toàn & điều khoản
+            </button>
+        </div>
+
+        <p>Developed by @Gunios-mFor2k</p>
+        <p>© 2026 GuniOS. All rights reserved.</p>
     </div>
 </footer>
 
@@ -502,15 +582,24 @@ footer strong {
     <div class="modal">
         <h3 id="authTitle">Đăng nhập</h3>
 
-        <input id="emailInput" type="email"
-            placeholder="Địa chỉ email" autocomplete="email">
+        <input
+            id="emailInput"
+            type="email"
+            placeholder="Địa chỉ email"
+            autocomplete="email"
+        >
 
-        <input id="passwordInput" type="password"
-            placeholder="Mật khẩu" autocomplete="current-password">
+        <input
+            id="passwordInput"
+            type="password"
+            placeholder="Mật khẩu"
+            autocomplete="current-password"
+        >
 
         <div id="authMessage" class="modal-message"></div>
 
-        <button id="authSubmit" class="btn btn-primary"
+        <button id="authSubmit"
+            class="btn btn-primary"
             style="width:100%">
             Đăng nhập
         </button>
@@ -519,7 +608,8 @@ footer strong {
             Chưa có tài khoản? Đăng ký
         </div>
 
-        <button id="authClose" class="btn btn-secondary"
+        <button id="authClose"
+            class="btn btn-secondary"
             style="width:100%;margin-top:15px">
             Đóng
         </button>
@@ -541,21 +631,39 @@ footer strong {
         </p>
 
         <div class="modal-actions">
-            <button id="cancelDownload" class="btn btn-secondary">
+            <button id="cancelDownload"
+                class="btn btn-secondary">
                 Hủy
             </button>
 
-            <button id="confirmDownload" class="btn btn-primary">
+            <button id="confirmDownload"
+                class="btn btn-primary">
                 Tiếp tục tải
             </button>
         </div>
     </div>
 </div>
 
+<!-- POLICY MODAL -->
+
+<div id="policyModal" class="modal-overlay">
+    <div class="modal policy-modal">
+        <h3 id="policyTitle">Chính sách GuniOS</h3>
+
+        <div id="policyContent" class="policy-content"></div>
+
+        <button id="policyClose"
+            class="btn btn-primary"
+            style="width:100%;margin-top:20px">
+            Đã hiểu
+        </button>
+    </div>
+</div>
+
 <script>
-/* ======================================
-   SUPABASE CONFIGURATION
-====================================== */
+/* =========================================
+   1. SUPABASE CONFIGURATION
+========================================= */
 
 const SUPABASE_URL =
 'https://ehrlnhicqvhkspcjlghd.supabase.co';
@@ -575,23 +683,24 @@ const db = window.supabase.createClient(
     }
 );
 
-/* ======================================
-   GLOBAL STATE
-====================================== */
+/* =========================================
+   2. GLOBAL STATE
+========================================= */
 
 let currentUser = null;
 let isRegisterMode = false;
 let selectedIPA = null;
 
-/* ======================================
-   ELEMENTS
-====================================== */
+/* =========================================
+   3. ELEMENTS
+========================================= */
 
 const appGrid = document.getElementById('appGrid');
 const statusBox = document.getElementById('status');
 
 const authModal = document.getElementById('authModal');
 const downloadModal = document.getElementById('downloadModal');
+const policyModal = document.getElementById('policyModal');
 
 const authButton = document.getElementById('authButton');
 const logoutButton = document.getElementById('logoutButton');
@@ -602,9 +711,9 @@ const authSubmit = document.getElementById('authSubmit');
 const authMessage = document.getElementById('authMessage');
 const authSwitch = document.getElementById('authSwitch');
 
-/* ======================================
-   SAFE HELPERS
-====================================== */
+/* =========================================
+   4. HELPERS
+========================================= */
 
 function setStatus(message, isError = false) {
     statusBox.textContent = message;
@@ -616,7 +725,7 @@ function hideStatus() {
     statusBox.classList.add('hidden');
 }
 
-function isValidDownloadURL(value) {
+function isValidURL(value) {
     try {
         const url = new URL(value);
 
@@ -635,9 +744,9 @@ function closeModal(modal) {
     modal.classList.remove('show');
 }
 
-/* ======================================
-   AUTH UI
-====================================== */
+/* =========================================
+   5. AUTH UI
+========================================= */
 
 function updateAuthUI() {
     if (currentUser) {
@@ -656,10 +765,14 @@ function updateAuthUI() {
 
 function openAuthModal() {
     isRegisterMode = false;
+
     updateAuthMode();
+
     authMessage.textContent = '';
+
     document.getElementById('emailInput').value = '';
     document.getElementById('passwordInput').value = '';
+
     openModal(authModal);
 }
 
@@ -677,7 +790,8 @@ function updateAuthMode() {
 
 authButton.addEventListener('click', openAuthModal);
 
-document.getElementById('authClose').addEventListener('click', () => {
+document.getElementById('authClose')
+.addEventListener('click', () => {
     closeModal(authModal);
 });
 
@@ -687,21 +801,26 @@ authSwitch.addEventListener('click', () => {
     updateAuthMode();
 });
 
-/* ======================================
-   REGISTER / LOGIN
-====================================== */
+/* =========================================
+   6. REGISTER / LOGIN
+========================================= */
 
 authSubmit.addEventListener('click', async () => {
-    const email = document.getElementById('emailInput').value.trim();
-    const password = document.getElementById('passwordInput').value;
+    const email =
+        document.getElementById('emailInput').value.trim();
+
+    const password =
+        document.getElementById('passwordInput').value;
 
     if (!email || !password) {
-        authMessage.textContent = 'Vui lòng nhập email và mật khẩu.';
+        authMessage.textContent =
+            'Vui lòng nhập email và mật khẩu.';
         return;
     }
 
     if (password.length < 6) {
-        authMessage.textContent = 'Mật khẩu phải có ít nhất 6 ký tự.';
+        authMessage.textContent =
+            'Mật khẩu phải có ít nhất 6 ký tự.';
         return;
     }
 
@@ -720,18 +839,19 @@ authSubmit.addEventListener('click', async () => {
 
             if (data.session) {
                 authMessage.textContent =
-                    'Đăng ký thành công. Bạn đã đăng nhập.';
+                    'Đăng ký thành công.';
                 closeModal(authModal);
             } else {
                 authMessage.textContent =
-                    'Đăng ký thành công. Hãy kiểm tra email để xác nhận tài khoản nếu được yêu cầu.';
+                    'Đăng ký thành công. Hãy kiểm tra email để xác nhận tài khoản nếu Supabase yêu cầu.';
             }
 
         } else {
-            const { error } = await db.auth.signInWithPassword({
-                email,
-                password
-            });
+            const { error } =
+                await db.auth.signInWithPassword({
+                    email,
+                    password
+                });
 
             if (error) throw error;
 
@@ -747,9 +867,9 @@ authSubmit.addEventListener('click', async () => {
     }
 });
 
-/* ======================================
-   LOGOUT
-====================================== */
+/* =========================================
+   7. LOGOUT
+========================================= */
 
 logoutButton.addEventListener('click', async () => {
     logoutButton.disabled = true;
@@ -766,9 +886,9 @@ logoutButton.addEventListener('click', async () => {
     }
 });
 
-/* ======================================
-   AUTH SESSION
-====================================== */
+/* =========================================
+   8. SESSION
+========================================= */
 
 async function checkSession() {
     const { data, error } = await db.auth.getSession();
@@ -787,9 +907,9 @@ db.auth.onAuthStateChange((_event, session) => {
     updateAuthUI();
 });
 
-/* ======================================
-   APP CARD
-====================================== */
+/* =========================================
+   9. CREATE APP CARD
+========================================= */
 
 function createAppCard(app, index) {
     const card = document.createElement('article');
@@ -798,14 +918,18 @@ function createAppCard(app, index) {
     const iconBox = document.createElement('div');
     iconBox.className = 'app-icon';
 
-    if (app.icon && isValidDownloadURL(app.icon)) {
+    if (app.icon && isValidURL(app.icon)) {
         const image = document.createElement('img');
+
         image.src = app.icon;
         image.alt = app.name || 'IPA icon';
         image.loading = 'lazy';
+
         image.onerror = () => {
+            iconBox.replaceChildren();
             iconBox.textContent = '📦';
         };
+
         iconBox.appendChild(image);
     } else {
         iconBox.textContent = '📦';
@@ -817,16 +941,19 @@ function createAppCard(app, index) {
     const description = document.createElement('p');
     description.className = 'app-desc';
     description.textContent =
-        app.desc || app.description || 'Ứng dụng IPA từ GuniOS.';
+        app.desc || app.description ||
+        'Ứng dụng IPA được giới thiệu bởi GuniOS.';
 
     const meta = document.createElement('div');
     meta.className = 'app-meta';
 
     const version = document.createElement('span');
-    version.textContent = 'Version: ' + (app.version || 'N/A');
+    version.textContent =
+        'Version: ' + (app.version || 'N/A');
 
     const size = document.createElement('span');
-    size.textContent = 'Size: ' + (app.size || 'N/A');
+    size.textContent =
+        'Size: ' + (app.size || 'N/A');
 
     meta.append(version, size);
 
@@ -849,9 +976,9 @@ function createAppCard(app, index) {
     return card;
 }
 
-/* ======================================
-   EMPTY SLOT
-====================================== */
+/* =========================================
+   10. EMPTY APP SLOT
+========================================= */
 
 function createEmptyCard(index) {
     const card = document.createElement('article');
@@ -883,9 +1010,9 @@ function createEmptyCard(index) {
     return card;
 }
 
-/* ======================================
-   LOAD 5 APPS FROM SUPABASE
-====================================== */
+/* =========================================
+   11. LOAD 5 APPS FROM SUPABASE
+========================================= */
 
 async function loadApps() {
     setStatus('Đang tải danh sách ứng dụng...');
@@ -900,15 +1027,21 @@ async function loadApps() {
 
         if (error) throw error;
 
-        const apps = Array.isArray(data) ? data.slice(0, 5) : [];
+        const apps = Array.isArray(data)
+            ? data.slice(0, 5)
+            : [];
 
         hideStatus();
 
         for (let i = 0; i < 5; i++) {
             if (apps[i]) {
-                appGrid.appendChild(createAppCard(apps[i], i));
+                appGrid.appendChild(
+                    createAppCard(apps[i], i)
+                );
             } else {
-                appGrid.appendChild(createEmptyCard(i));
+                appGrid.appendChild(
+                    createEmptyCard(i)
+                );
             }
         }
 
@@ -920,18 +1053,18 @@ async function loadApps() {
         }
 
         setStatus(
-            'Không thể tải dữ liệu từ Supabase. Kiểm tra bảng apps và quyền truy cập.',
+            'Không thể tải dữ liệu. Hãy kiểm tra Supabase, bảng apps và quyền truy cập.',
             true
         );
     }
 }
 
-/* ======================================
-   DOWNLOAD PERMISSION
-====================================== */
+/* =========================================
+   12. DOWNLOAD PERMISSION
+========================================= */
 
 async function requestDownload(app) {
-    // Kiểm tra session mới nhất trước mỗi lần tải.
+    // Luôn kiểm tra phiên đăng nhập mới nhất.
     const { data, error } = await db.auth.getSession();
 
     if (error) {
@@ -942,15 +1075,15 @@ async function requestDownload(app) {
     currentUser = data.session?.user || null;
     updateAuthUI();
 
-    // Chưa đăng nhập: chặn tải.
+    // Chưa đăng nhập thì chặn tải.
     if (!currentUser) {
         alert('Bạn cần đăng ký hoặc đăng nhập để tải IPA.');
         openAuthModal();
         return;
     }
 
-    // Kiểm tra link IPA.
-    if (!app.ipa || !isValidDownloadURL(app.ipa)) {
+    // Kiểm tra link tải.
+    if (!app.ipa || !isValidURL(app.ipa)) {
         alert('Ứng dụng này chưa có link IPA hợp lệ.');
         return;
     }
@@ -959,9 +1092,9 @@ async function requestDownload(app) {
     openModal(downloadModal);
 }
 
-/* ======================================
-   CONFIRM DOWNLOAD
-====================================== */
+/* =========================================
+   13. CONFIRM DOWNLOAD
+========================================= */
 
 document.getElementById('cancelDownload')
 .addEventListener('click', () => {
@@ -973,12 +1106,12 @@ document.getElementById('confirmDownload')
 .addEventListener('click', async () => {
     if (!selectedIPA) return;
 
-    // Kiểm tra lại phiên đăng nhập trước khi mở link.
     const { data, error } = await db.auth.getSession();
 
     if (error || !data.session) {
         selectedIPA = null;
         closeModal(downloadModal);
+
         alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
         openAuthModal();
         return;
@@ -989,25 +1122,150 @@ document.getElementById('confirmDownload')
     selectedIPA = null;
     closeModal(downloadModal);
 
-    // Mở link tải IPA.
     window.location.assign(url);
 });
 
-/* ======================================
-   MODAL BACKDROP
-====================================== */
+/* =========================================
+   14. POLICIES
+========================================= */
 
-[authModal, downloadModal].forEach(modal => {
+const policies = {
+    privacy: {
+        title: 'Chính sách quyền riêng tư',
+
+        content: `
+            <p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
+
+            <h4>1. Thông tin được xử lý</h4>
+            <p>GuniOS sử dụng Supabase Auth để quản lý tài khoản.
+            Thông tin email và dữ liệu xác thực được xử lý
+            thông qua dịch vụ Supabase.</p>
+
+            <h4>2. Mục đích sử dụng</h4>
+            <ul>
+                <li>Đăng ký và xác thực tài khoản.</li>
+                <li>Quản lý phiên đăng nhập.</li>
+                <li>Kiểm soát quyền tải ứng dụng trên website.</li>
+                <li>Hỗ trợ và xử lý lỗi dịch vụ.</li>
+            </ul>
+
+            <h4>3. Lưu trữ dữ liệu</h4>
+            <p>Dữ liệu tài khoản được xử lý thông qua
+            cơ sở hạ tầng Supabase. Người dùng không cần
+            cung cấp mật khẩu Supabase cho GuniOS.</p>
+
+            <h4>4. Chia sẻ thông tin</h4>
+            <p>GuniOS không chủ đích bán thông tin cá nhân
+            của người dùng. Dữ liệu có thể được xử lý bởi
+            nhà cung cấp dịch vụ cần thiết để vận hành website
+            hoặc khi có nghĩa vụ pháp lý.</p>
+
+            <h4>5. Quyền của người dùng</h4>
+            <p>Người dùng có thể yêu cầu hỗ trợ, cập nhật
+            hoặc xóa tài khoản thông qua Admin GuniOS.</p>
+
+            <h4>6. Cookie và phiên đăng nhập</h4>
+            <p>Website sử dụng cơ chế lưu phiên của Supabase Auth
+            để duy trì trạng thái đăng nhập và hỗ trợ xác thực.</p>
+
+            <h4>7. Liên hệ</h4>
+            <p>Admin: @Gunios-mFor2k</p>
+        `
+    },
+
+    safety: {
+        title: 'Chính sách an toàn & điều khoản sử dụng',
+
+        content: `
+            <p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
+
+            <h4>1. Phạm vi dịch vụ</h4>
+            <p>GuniOS là nền tảng giới thiệu và phân phối
+            các ứng dụng IPA do GuniOS phát triển hoặc
+            được phép phân phối.</p>
+
+            <h4>2. Trách nhiệm người dùng</h4>
+            <ul>
+                <li>Sử dụng ứng dụng đúng mục đích.</li>
+                <li>Kiểm tra khả năng tương thích thiết bị.</li>
+                <li>Không sử dụng ứng dụng vào mục đích trái pháp luật.</li>
+                <li>Không khai thác hoặc phá hoại hệ thống.</li>
+                <li>Không phát tán mã độc thông qua dịch vụ.</li>
+            </ul>
+
+            <h4>3. An toàn ứng dụng</h4>
+            <p>Người dùng nên kiểm tra nguồn gốc và quyền
+            của ứng dụng trước khi cài đặt. Không có cam kết
+            rằng mọi ứng dụng đều tương thích với mọi thiết bị
+            hoặc phiên bản iOS.</p>
+
+            <h4>4. Báo cáo lỗi</h4>
+            <p>Nếu phát hiện lỗi, sự cố hoặc vấn đề bảo mật,
+            vui lòng đóng góp ý kiến với Admin
+            @Gunios-mFor2k.</p>
+
+            <h4>5. Sở hữu trí tuệ</h4>
+            <p>Logo, thương hiệu và nội dung do GuniOS tạo ra
+            thuộc quyền của chủ sở hữu tương ứng.
+            Không được tự ý sử dụng hoặc phân phối lại
+            trái phép.</p>
+
+            <h4>6. Giới hạn trách nhiệm</h4>
+            <p>Trong phạm vi pháp luật cho phép, GuniOS không
+            chịu trách nhiệm đối với thiệt hại phát sinh từ
+            việc sử dụng sai mục đích, thiết bị không tương thích
+            hoặc hành vi vi phạm điều khoản của người dùng.</p>
+
+            <h4>7. Thay đổi điều khoản</h4>
+            <p>GuniOS có thể cập nhật chính sách khi cần thiết.
+            Phiên bản mới sẽ được công bố trên website.</p>
+
+            <h4>8. Liên hệ</h4>
+            <p>Admin: @Gunios-mFor2k</p>
+        `
+    }
+};
+
+function openPolicy(type) {
+    const policy = policies[type];
+
+    if (!policy) return;
+
+    document.getElementById('policyTitle').textContent =
+        policy.title;
+
+    document.getElementById('policyContent').innerHTML =
+        policy.content;
+
+    openModal(policyModal);
+}
+
+function closePolicy() {
+    closeModal(policyModal);
+}
+
+document.getElementById('policyClose')
+.addEventListener('click', closePolicy);
+
+/* =========================================
+   15. MODAL BACKDROP
+========================================= */
+
+[authModal, downloadModal, policyModal].forEach(modal => {
     modal.addEventListener('click', event => {
         if (event.target === modal) {
             closeModal(modal);
+
+            if (modal === downloadModal) {
+                selectedIPA = null;
+            }
         }
     });
 });
 
-/* ======================================
-   START
-====================================== */
+/* =========================================
+   16. START WEBSITE
+========================================= */
 
 async function startApp() {
     await checkSession();
@@ -1015,6 +1273,7 @@ async function startApp() {
 }
 
 startApp();
+
 </script>
 
 </body>
