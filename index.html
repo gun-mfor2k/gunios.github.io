@@ -10,86 +10,62 @@
 <title>GuniOS — IPA Store</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --bg:      #090d18;
-  --panel:   #111a2b;
-  --panel2:  #151f33;
-  --border:  #26334b;
-  --primary: #8972ff;
-  --text:    #f4f5ff;
-  --muted:   #9aa7bd;
-  --success: #4ade80;
-  --error:   #f87171;
-  --gold:    #f5c842;
+:root{
+  --bg:#090d18;--panel:#111a2b;--panel2:#151f33;--border:#26334b;
+  --primary:#8972ff;--text:#f4f5ff;--muted:#9aa7bd;
+  --success:#4ade80;--error:#f87171;--gold:#f5c842;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-button,input{font:inherit}
-button{cursor:pointer}
-a{color:var(--primary);text-decoration:none}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--panel)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.container{width:min(1100px,92%);margin:auto}
-.hidden{display:none!important}
+button,input{font:inherit}button{cursor:pointer}a{color:var(--primary);text-decoration:none}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--panel)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.container{width:min(1100px,92%);margin:auto}.hidden{display:none!important}
 
-/* ── HEADER ── */
-header{
-  background:rgba(9,13,24,.92);
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:50;
-  backdrop-filter:blur(16px);
-}
+/* HEADER */
+header{background:rgba(9,13,24,.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;backdrop-filter:blur(16px)}
 .nav{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{font-size:24px;font-weight:900;letter-spacing:-1px;color:var(--primary)}
 .logo span{color:#fff}
 .nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.user-info{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.user-email{color:var(--muted);font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-user{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.nav-email{color:var(--muted);font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tier-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.5px}
 .tier-badge.pro{background:#3b2a00;color:var(--gold);border:1px solid #6b4e00}
 .tier-badge.free{background:#1a1f35;color:#8899cc;border:1px solid var(--border)}
 
-/* ── BUTTONS ── */
+/* BUTTONS */
 .btn{border:0;padding:9px 16px;border-radius:10px;font-weight:700;font-size:13px;transition:.18s}
-.btn:hover{opacity:.85}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-primary{color:#fff;background:linear-gradient(120deg,#795cff,#536fff)}
 .btn-secondary{color:#fff;background:#1e2a40;border:1px solid var(--border)}
 .btn-gold{color:#0d0a00;background:linear-gradient(120deg,#f5c842,#e09b20);font-weight:900}
 .btn-sm{padding:7px 12px;font-size:12px}
-.btn-danger{color:#fff;background:#3d1515;border:1px solid #6b2020}
 
-/* ── USER PROFILE CARD ── */
+/* USER PROFILE CARD */
 #userCard{
-  background:linear-gradient(135deg,#111a2b,#0e1626);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px 24px;
-  margin:24px 0 10px;
-  display:flex;
-  align-items:center;
-  gap:20px;
-  flex-wrap:wrap;
+  background:linear-gradient(135deg,#0e1828,#111d30);
+  border:1px solid var(--border);border-radius:18px;
+  padding:20px 24px;margin:24px 0 10px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
 }
-.user-card-avatar{
-  width:54px;height:54px;border-radius:50%;
+.uc-avatar{
+  width:54px;height:54px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#795cff,#536fff);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:900;color:#fff;flex-shrink:0;
-  box-shadow:0 0 18px #7955ff44;
+  font-size:22px;font-weight:900;color:#fff;
+  box-shadow:0 0 20px #7955ff44;
 }
-.user-card-info{flex:1;min-width:0}
-.user-card-email{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.user-card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.user-card-tier{font-size:12px;font-weight:800;padding:3px 12px;border-radius:20px}
-.user-card-tier.free{background:#1a1f35;color:#8899cc;border:1px solid var(--border)}
-.user-card-tier.pro{background:linear-gradient(90deg,#3b2a00,#4a3400);color:var(--gold);border:1px solid #6b4e00}
-.user-card-tier.lifetime{background:linear-gradient(90deg,#2a0a00,#3d1500);color:#ff9f4a;border:1px solid #7a3200}
-.user-card-since{font-size:11px;color:var(--muted)}
-.user-card-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.uc-info{flex:1;min-width:0}
+.uc-email{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uc-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.uc-tier{font-size:12px;font-weight:800;padding:3px 12px;border-radius:20px}
+.uc-tier.free{background:#1a1f35;color:#8899cc;border:1px solid var(--border)}
+.uc-tier.pro{background:linear-gradient(90deg,#3b2a00,#4a3400);color:var(--gold);border:1px solid #6b4e00}
+.uc-tier.lifetime{background:linear-gradient(90deg,#2a0a00,#3d1500);color:#ff9f4a;border:1px solid #7a3200}
+.uc-since{font-size:11px;color:var(--muted)}
+.uc-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
 
-/* ── HERO ── */
+/* HERO */
 .hero{text-align:center;padding:70px 15px 50px}
 .hero-tag{display:inline-block;color:#aa9aff;background:#211b43;border:1px solid #41347c;border-radius:30px;padding:7px 14px;font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:20px}
 .hero h1{font-size:clamp(34px,7vw,58px);font-weight:900;letter-spacing:-2px;margin-bottom:16px;line-height:1.1}
@@ -97,7 +73,7 @@ header{
 .hero p{max-width:620px;margin:0 auto 28px;color:var(--muted);line-height:1.8;font-size:15px}
 .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-/* ── PRICING ── */
+/* PRICING */
 .pricing-section{padding:60px 0}
 .section-title{text-align:center;margin-bottom:40px}
 .section-title h2{font-size:30px;font-weight:900;margin-bottom:10px}
@@ -112,15 +88,24 @@ header{
 .pricing-price span{font-size:14px;font-weight:400;color:var(--muted)}
 .pricing-desc{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6}
 .pricing-features{list-style:none;margin-bottom:24px}
-.pricing-features li{font-size:13px;padding:7px 0;border-bottom:1px solid var(--border);color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+.pricing-features li{font-size:13px;padding:7px 0;border-bottom:1px solid var(--border);color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.5}
 .pricing-features li:last-child{border-bottom:0}
 .pricing-features li.ok{color:var(--text)}
-.pricing-features li::before{content:"✓";color:var(--success);font-weight:800;flex-shrink:0}
+.pricing-features li::before{content:"✓";color:var(--success);font-weight:800;flex-shrink:0;margin-top:1px}
 .pricing-features li.no::before{content:"✗";color:var(--error)}
 .pricing-features li.no{color:var(--muted)}
-.feature-highlight{color:#a8f0c6;font-weight:700}
+.feat-hl{color:#a8f0c6;font-weight:800}
 
-/* ── STORE ── */
+/* LAUNCH DAEMON BADGE inside card */
+.daemon-box{
+  background:linear-gradient(135deg,#0a1a0a,#0d1f10);
+  border:1px solid #2a4a2a;border-radius:10px;
+  padding:10px 12px;margin:4px 0 8px;font-size:12px;
+  color:#b8e8b8;line-height:1.6;
+}
+.daemon-box strong{color:#4ade80;display:block;margin-bottom:3px;font-size:11px;letter-spacing:.5px}
+
+/* STORE */
 .store-section{padding:20px 0 60px}
 .store-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:22px}
 .store-heading h2{font-size:24px;margin-bottom:6px}
@@ -128,7 +113,7 @@ header{
 .store-count{color:#a99aff;font-size:12px;white-space:nowrap}
 .app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
 
-/* ── APP CARD ── */
+/* APP CARD */
 .app-card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--border);border-radius:18px;padding:20px;transition:.25s;position:relative}
 .app-card:hover{transform:translateY(-4px);border-color:var(--primary)}
 .app-card.pro-locked{border-color:#3b2a00}
@@ -138,23 +123,22 @@ header{
 .app-card h3{font-size:17px;margin-bottom:8px}
 .app-desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px;min-height:40px}
 .app-meta{color:#8290a9;font-size:11px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px}
-.download-btn{display:block;width:100%;border:0;text-align:center;color:#fff;background:linear-gradient(120deg,#795cff,#536fff);padding:11px;border-radius:11px;font-weight:800;font-size:13px;transition:.18s}
-.download-btn:hover{opacity:.85}
-.download-btn:disabled{opacity:.45;cursor:not-allowed}
-.download-btn.gold-btn{background:linear-gradient(120deg,#f5c842,#e09b20);color:#0d0a00}
+.dl-btn{display:block;width:100%;border:0;text-align:center;color:#fff;background:linear-gradient(120deg,#795cff,#536fff);padding:11px;border-radius:11px;font-weight:800;font-size:13px;transition:.18s;cursor:pointer}
+.dl-btn:hover{opacity:.85}.dl-btn:disabled{opacity:.45;cursor:not-allowed}
+.dl-btn.gold{background:linear-gradient(120deg,#f5c842,#e09b20);color:#0d0a00}
 
-/* ── STATUS ── */
+/* STATUS */
 .status{text-align:center;color:var(--muted);font-size:13px;padding:20px;margin-bottom:12px}
 .status.error{color:var(--error)}
 
-/* ── FOOTER ── */
+/* FOOTER */
 footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:#718099;font-size:12px;line-height:2}
 footer strong{color:#a18cff}
 .footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin:14px 0}
 .footer-links button{background:none;border:none;color:#a99aff;font-size:12px;cursor:pointer}
 .footer-links button:hover{text-decoration:underline}
 
-/* ── MODALS ── */
+/* MODALS */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
 .modal-overlay.show{display:flex}
 .modal{width:100%;max-width:440px;background:#131d2f;border:1px solid #2e3f5c;border-radius:22px;padding:28px;box-shadow:0 24px 80px #0009;animation:popIn .2s ease}
@@ -165,8 +149,7 @@ footer strong{color:#a18cff}
 .modal input{width:100%;padding:13px;margin-bottom:11px;border-radius:11px;border:1px solid var(--border);background:#0b1220;color:#fff;outline:none;font-size:14px}
 .modal input:focus{border-color:var(--primary)}
 .modal-msg{font-size:12px;line-height:1.6;margin:4px 0 12px;min-height:18px}
-.modal-msg.ok{color:var(--success)}
-.modal-msg.err{color:var(--error)}
+.modal-msg.ok{color:var(--success)}.modal-msg.err{color:var(--error)}
 .modal-actions{display:flex;gap:10px;margin-top:16px}
 .modal-actions button{flex:1}
 .auth-switch{color:#a99aff;font-size:13px;text-align:center;margin-top:16px;cursor:pointer}
@@ -176,32 +159,28 @@ footer strong{color:#a18cff}
 .policy-content ul{padding-left:18px}
 .policy-content p{margin-bottom:10px}
 
-/* ── TOAST ── */
+/* TOAST */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e2d48;border:1px solid var(--border);color:#fff;padding:12px 22px;border-radius:12px;font-size:13px;font-weight:600;z-index:999;transition:.3s;white-space:nowrap;pointer-events:none}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.ok{border-color:var(--success);color:var(--success)}
 #toast.err{border-color:var(--error);color:var(--error)}
 
-/* ── DIVIDER ── */
 .divider{height:1px;background:var(--border);margin:50px 0}
 
 @media(max-width:520px){
   .hero{padding:48px 15px 36px}
-  .nav{min-height:60px}
-  .logo{font-size:21px}
-  .user-email{display:none}
+  .nav{min-height:60px}.logo{font-size:21px}
+  .nav-email{display:none}
   .store-heading h2{font-size:20px}
   .app-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
   .app-card{padding:14px;border-radius:14px}
   .app-icon{width:52px;height:52px}
-  .app-card h3{font-size:14px}
-  .app-desc{font-size:12px}
+  .app-card h3{font-size:14px}.app-desc{font-size:12px}
   .pricing-grid{grid-template-columns:1fr}
   .modal{padding:20px}
   .hero-actions{flex-direction:column;align-items:center}
   #userCard{flex-direction:column;align-items:flex-start;gap:14px}
-  .user-card-actions{width:100%}
-  .user-card-actions .btn{flex:1}
+  .uc-actions{width:100%}.uc-actions .btn{flex:1}
 }
 </style>
 </head>
@@ -212,19 +191,20 @@ footer strong{color:#a18cff}
   <div class="container nav">
     <div class="logo">Guni<span>OS</span></div>
     <div class="nav-right">
-      <div id="userInfo" class="user-info hidden">
-        <span id="userEmail" class="user-email"></span>
-        <span id="tierBadge" class="tier-badge free">FREE</span>
+      <div id="navUserInfo" class="nav-user hidden">
+        <span id="navEmail" class="nav-email"></span>
+        <span id="navTierBadge" class="tier-badge free">FREE</span>
       </div>
-      <button id="btnUpgrade" class="btn btn-gold btn-sm hidden">⭐ Nâng cấp Pro</button>
-      <button id="btnLogin"   class="btn btn-primary">Đăng nhập</button>
-      <button id="btnLogout"  class="btn btn-secondary hidden">Đăng xuất</button>
+      <button id="btnNavUpgrade" class="btn btn-gold btn-sm hidden" onclick="openUpgrade()">⭐ Nâng cấp Pro</button>
+      <button id="btnLogin" class="btn btn-primary">Đăng nhập</button>
+      <button id="btnLogout" class="btn btn-secondary hidden">Đăng xuất</button>
     </div>
   </div>
 </header>
 
-<!-- HERO -->
 <main class="container">
+
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-tag">GUNIOS OFFICIAL STORE</div>
     <h1>Kho IPA <span>Tự Phát Triển</span></h1>
@@ -235,18 +215,18 @@ footer strong{color:#a18cff}
     </div>
   </section>
 
-  <!-- USER PROFILE CARD — shown after login -->
+  <!-- USER CARD — hiện sau khi đăng nhập -->
   <div id="userCard" class="hidden">
-    <div class="user-card-avatar" id="userCardAvatar">?</div>
-    <div class="user-card-info">
-      <div class="user-card-email" id="userCardEmail">—</div>
-      <div class="user-card-meta">
-        <span class="user-card-tier free" id="userCardTier">FREE</span>
-        <span class="user-card-since" id="userCardSince"></span>
+    <div class="uc-avatar" id="ucAvatar">?</div>
+    <div class="uc-info">
+      <div class="uc-email" id="ucEmail">—</div>
+      <div class="uc-meta">
+        <span class="uc-tier free" id="ucTierLabel">FREE</span>
+        <span class="uc-since" id="ucSince"></span>
       </div>
     </div>
-    <div class="user-card-actions">
-      <button id="cardBtnUpgrade" class="btn btn-gold btn-sm hidden" onclick="openUpgrade()">⭐ Nâng cấp Pro</button>
+    <div class="uc-actions">
+      <button id="ucBtnUpgrade" class="btn btn-gold btn-sm hidden" onclick="openUpgrade()">⭐ Nâng cấp Pro</button>
       <button class="btn btn-secondary btn-sm" onclick="db.auth.signOut()">Đăng xuất</button>
     </div>
   </div>
@@ -285,12 +265,14 @@ footer strong{color:#a18cff}
           <li class="ok">iVibe Studio AI: không giới hạn</li>
           <li class="ok">Toàn bộ agents &amp; skills</li>
           <li class="ok">Build &amp; terminal không bị chặn</li>
-          <li class="ok"><span class="feature-highlight">LaunchDaemon chạy ngầm 2h</span> cho prompt phức tạp</li>
+          <li class="ok">
+            <span class="feat-hl">LaunchDaemon chạy ngầm 2h</span>
+            <span style="color:var(--muted);font-size:12px;display:block;margin-top:2px">Hỗ trợ prompt phức tạp, nặng tải — không bị kill tiến trình</span>
+          </li>
           <li class="ok">Hỗ trợ ưu tiên qua Telegram</li>
-          <li class="oke">Chạy Ngầm LauchDaemon 2 tiếng </li>
           <li class="ok">Cập nhật sớm nhất</li>
         </ul>
-        <button id="btnBuyPro" class="btn btn-gold" style="width:100%" onclick="openUpgrade()">Nâng cấp Pro — 90.000đ/tháng</button>
+        <button class="btn btn-gold" style="width:100%" onclick="openUpgrade()">Nâng cấp Pro — 90.000đ/tháng</button>
       </div>
 
       <!-- LIFETIME -->
@@ -300,7 +282,10 @@ footer strong{color:#a18cff}
         <div class="pricing-desc">Trả một lần, dùng 6 tháng liên tục. Không cần gia hạn hàng tháng.</div>
         <ul class="pricing-features">
           <li class="ok">Tất cả quyền lợi Pro</li>
-          <li class="ok"><span class="feature-highlight">LaunchDaemon chạy ngầm 2h</span> cho prompt phức tạp</li>
+          <li class="ok">
+            <span class="feat-hl">LaunchDaemon chạy ngầm 2h</span>
+            <span style="color:var(--muted);font-size:12px;display:block;margin-top:2px">Hỗ trợ prompt phức tạp, nặng tải — không bị kill tiến trình</span>
+          </li>
           <li class="ok">Không cần gia hạn 6 tháng</li>
           <li class="ok">Ưu tiên tính năng mới</li>
           <li class="ok">Badge Lifetime trong app</li>
@@ -325,6 +310,7 @@ footer strong{color:#a18cff}
     <div id="statusBox" class="status">Đang tải danh sách ứng dụng...</div>
     <div id="appGrid" class="app-grid"></div>
   </section>
+
 </main>
 
 <!-- FOOTER -->
@@ -341,16 +327,15 @@ footer strong{color:#a18cff}
   </div>
 </footer>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- ══════════ MODALS ══════════ -->
+<!-- ══ MODALS ══ -->
 
 <!-- AUTH -->
 <div id="authModal" class="modal-overlay">
   <div class="modal">
     <h3 id="authTitle">Đăng nhập</h3>
-    <input id="inEmail"    type="email"    placeholder="Địa chỉ email" autocomplete="email">
+    <input id="inEmail" type="email" placeholder="Địa chỉ email" autocomplete="email">
     <input id="inPassword" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" autocomplete="current-password">
     <div id="authMsg" class="modal-msg"></div>
     <button id="btnAuthSubmit" class="btn btn-primary" style="width:100%">Đăng nhập</button>
@@ -366,24 +351,16 @@ footer strong{color:#a18cff}
   <div class="modal">
     <h3>⭐ Nâng cấp Pro</h3>
     <p id="upgradeDesc">Mở khoá toàn bộ tính năng trên website và iVibe Studio app.</p>
-
-    <!-- LaunchDaemon highlight box -->
-    <div style="background:linear-gradient(135deg,#0d1f0d,#0a1a0a);border:1px solid #2a4a2a;border-radius:12px;padding:14px 16px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:800;color:#4ade80;margin-bottom:6px;letter-spacing:.5px">🚀 TÍNH NĂNG ĐỘC QUYỀN PRO</div>
-      <div style="font-size:13px;color:#c8f0c8;line-height:1.7">
-        <strong>LaunchDaemon chạy ngầm 2h</strong> — Hỗ trợ các prompt phức tạp, nặng tải hoạt động liên tục trong nền mà không bị hệ thống kill tiến trình. Lý tưởng cho automation, build dài và AI pipeline.
-      </div>
+    <div style="background:linear-gradient(135deg,#0a1a0a,#0d1f10);border:1px solid #2a4a2a;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:800;color:#4ade80;margin-bottom:6px;letter-spacing:.8px">🚀 ĐỘC QUYỀN PRO</div>
+      <div style="font-size:13px;color:#c8f0c8;line-height:1.7"><strong>LaunchDaemon chạy ngầm 2h</strong> — Giữ tiến trình sống liên tục trong nền, không bị hệ thống kill. Lý tưởng cho automation, build dài và AI pipeline phức tạp.</div>
     </div>
-
     <div style="background:#0b1220;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
       <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Liên hệ Admin để thanh toán và kích hoạt:</div>
-      <a href="https://t.me/gunparh" target="_blank" style="display:block;text-align:center;padding:12px;background:#1a3a5c;border:1px solid #2a5080;border-radius:10px;color:#5ba3f5;font-weight:700;font-size:14px">
-        📱 Telegram: @gunparh
-      </a>
+      <a href="https://t.me/gunparh" target="_blank" style="display:block;text-align:center;padding:12px;background:#1a3a5c;border:1px solid #2a5080;border-radius:10px;color:#5ba3f5;font-weight:700;font-size:14px">📱 Telegram: @gunparh</a>
     </div>
     <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:4px">
-      Sau khi thanh toán, Admin sẽ kích hoạt Pro cho tài khoản <strong id="upgradeEmail" style="color:var(--text)"></strong> trong vòng 15 phút.
-      <br>Mở lại app iVibe Studio và đăng nhập lại để nhận quyền.
+      Sau khi thanh toán, Admin sẽ kích hoạt Pro cho tài khoản <strong id="upgradeEmail" style="color:var(--text)"></strong> trong vòng 15 phút.<br>Mở lại app iVibe Studio và đăng nhập lại để nhận quyền.
     </div>
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closeModal('upgradeModal')">Đóng</button>
@@ -398,7 +375,7 @@ footer strong{color:#a18cff}
     <h3>GuniOS — Xác nhận tải</h3>
     <p>Đây là IPA được phát triển bởi <strong style="color:#a99aff">@Gunios-mFor2k</strong>.<br><br>Nếu có lỗi trong quá trình sử dụng, vui lòng phản hồi với Admin.</p>
     <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('dlModal');window._pendingIPA=null">Huỷ</button>
+      <button class="btn btn-secondary" onclick="closeModal('dlModal');_pendingIPA=null">Huỷ</button>
       <button class="btn btn-primary" id="btnConfirmDL">Tiếp tục tải</button>
     </div>
   </div>
@@ -414,448 +391,283 @@ footer strong{color:#a18cff}
 </div>
 
 <script>
-/* ══════════════════════════════════════════
-   SUPABASE CONFIG
-══════════════════════════════════════════ */
+/* ── SUPABASE ── */
 const SB_URL = 'https://ehrlnhicqvhkspcjlghd.supabase.co';
 const SB_KEY = 'sb_publishable_CyHLxfUbcMeP7MHI1jdUJQ_WWfwcXzL';
 const db = window.supabase.createClient(SB_URL, SB_KEY, {
   auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
 });
 
-/* ══════════════════════════════════════════
-   STATE
-══════════════════════════════════════════ */
-let _user    = null;
-let _profile = null;
-let _pendingIPA = null;
+/* ── STATE ── */
+let _user = null, _profile = null, _pendingIPA = null;
 
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-let _toastTimer = null;
-function toast(msg, type='', dur=2800) {
+/* ── TOAST ── */
+let _tt = null;
+function toast(msg, type='', dur=2800){
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'show ' + type;
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => el.className = '', dur);
+  el.textContent = msg; el.className = 'show ' + type;
+  clearTimeout(_tt); _tt = setTimeout(() => el.className = '', dur);
 }
 
-/* ══════════════════════════════════════════
-   MODAL HELPERS
-══════════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id).classList.add('show') }
-function closeModal(id) { document.getElementById(id).classList.remove('show') }
-
+/* ── MODALS ── */
+function openModal(id){ document.getElementById(id).classList.add('show') }
+function closeModal(id){ document.getElementById(id).classList.remove('show') }
 document.querySelectorAll('.modal-overlay').forEach(ov => {
   ov.addEventListener('click', e => {
-    if (e.target === ov) {
-      ov.classList.remove('show');
-      if (ov.id === 'dlModal') _pendingIPA = null;
-    }
+    if(e.target === ov){ ov.classList.remove('show'); if(ov.id==='dlModal') _pendingIPA=null; }
   });
 });
 
-/* ══════════════════════════════════════════
-   USER CARD
-══════════════════════════════════════════ */
-function updateUserCard() {
-  const card = document.getElementById('userCard');
-  if (!_user) { card.classList.add('hidden'); return; }
-
-  card.classList.remove('hidden');
-
-  // Avatar letter
-  const letter = (_user.email || '?')[0].toUpperCase();
-  document.getElementById('userCardAvatar').textContent = letter;
-
-  // Email
-  document.getElementById('userCardEmail').textContent = _user.email || '—';
-
-  // Tier badge
-  const tierEl = document.getElementById('userCardTier');
-  const tier   = _profile?.tier || 'free';
-  if (tier === 'lifetime') {
-    tierEl.textContent  = '🔥 LIFETIME';
-    tierEl.className    = 'user-card-tier lifetime';
-  } else if (tier === 'pro') {
-    tierEl.textContent  = '⭐ PRO';
-    tierEl.className    = 'user-card-tier pro';
-  } else {
-    tierEl.textContent  = 'FREE';
-    tierEl.className    = 'user-card-tier free';
-  }
-
-  // Joined date from metadata
-  const created = _user.created_at;
-  if (created) {
-    const d = new Date(created);
-    document.getElementById('userCardSince').textContent =
-      'Thành viên từ ' + d.toLocaleDateString('vi-VN', {year:'numeric',month:'long'});
-  }
-
-  // Show upgrade button only for free users
-  const isPro = tier === 'pro' || tier === 'lifetime';
-  document.getElementById('cardBtnUpgrade').classList.toggle('hidden', isPro);
+/* ── PROFILE ── */
+async function fetchProfile(uid){
+  if(!uid) return;
+  const { data } = await db.from('profiles').select('*').eq('id',uid).single();
+  _profile = data || null;
 }
 
-/* ══════════════════════════════════════════
-   AUTH UI
-══════════════════════════════════════════ */
-function refreshUI() {
-  const loggedIn = !!_user;
-  const isPro    = _profile?.tier === 'pro' || _profile?.tier === 'lifetime';
+/* ── USER CARD ── */
+function updateUserCard(){
+  const card = document.getElementById('userCard');
+  if(!_user){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
 
-  document.getElementById('btnLogin').classList.toggle('hidden', loggedIn);
-  document.getElementById('btnLogout').classList.toggle('hidden', !loggedIn);
-  document.getElementById('userInfo').classList.toggle('hidden', !loggedIn);
-  document.getElementById('btnUpgrade').classList.toggle('hidden', !loggedIn || isPro);
+  document.getElementById('ucAvatar').textContent = (_user.email||'?')[0].toUpperCase();
+  document.getElementById('ucEmail').textContent  = _user.email || '—';
 
-  if (loggedIn) {
-    document.getElementById('userEmail').textContent = _user.email || '';
-    const badge = document.getElementById('tierBadge');
-    if (_profile?.tier === 'lifetime') {
-      badge.textContent = '🔥 LIFETIME';
-      badge.className   = 'tier-badge pro';
-    } else if (isPro) {
-      badge.textContent = '⭐ PRO';
-      badge.className   = 'tier-badge pro';
-    } else {
-      badge.textContent = 'FREE';
-      badge.className   = 'tier-badge free';
-    }
+  const tier   = _profile?.tier || 'free';
+  const tierEl = document.getElementById('ucTierLabel');
+  if(tier === 'lifetime'){
+    tierEl.textContent = '🔥 LIFETIME'; tierEl.className = 'uc-tier lifetime';
+  } else if(tier === 'pro'){
+    tierEl.textContent = '⭐ PRO';      tierEl.className = 'uc-tier pro';
+  } else {
+    tierEl.textContent = 'FREE';        tierEl.className = 'uc-tier free';
+  }
+
+  if(_user.created_at){
+    const d = new Date(_user.created_at);
+    document.getElementById('ucSince').textContent =
+      'Thành viên từ ' + d.toLocaleDateString('vi-VN',{year:'numeric',month:'long'});
+  }
+
+  const isPro = tier==='pro'||tier==='lifetime';
+  document.getElementById('ucBtnUpgrade').classList.toggle('hidden', isPro);
+}
+
+/* ── REFRESH UI ── */
+function refreshUI(){
+  const on    = !!_user;
+  const isPro = _profile?.tier==='pro'||_profile?.tier==='lifetime';
+
+  document.getElementById('btnLogin').classList.toggle('hidden', on);
+  document.getElementById('btnLogout').classList.toggle('hidden', !on);
+  document.getElementById('navUserInfo').classList.toggle('hidden', !on);
+  document.getElementById('btnNavUpgrade').classList.toggle('hidden', !on||isPro);
+
+  if(on){
+    document.getElementById('navEmail').textContent = _user.email||'';
+    const b = document.getElementById('navTierBadge');
+    const t = _profile?.tier||'free';
+    if(t==='lifetime'){ b.textContent='🔥 LIFETIME'; b.className='tier-badge pro'; }
+    else if(t==='pro'){ b.textContent='⭐ PRO';       b.className='tier-badge pro'; }
+    else              { b.textContent='FREE';          b.className='tier-badge free'; }
   }
 
   updateUserCard();
   renderAppButtons(isPro);
 }
 
-/* ══════════════════════════════════════════
-   PROFILE FETCH
-══════════════════════════════════════════ */
-async function fetchProfile(uid) {
-  if (!uid) return;
-  const { data } = await db
-    .from('profiles')
-    .select('*')
-    .eq('id', uid)
-    .single();
-  _profile = data || null;
-}
-
-/* ══════════════════════════════════════════
-   SESSION
-══════════════════════════════════════════ */
-async function initSession() {
+/* ── SESSION ── */
+async function initSession(){
   const { data } = await db.auth.getSession();
   _user = data.session?.user || null;
-  if (_user) await fetchProfile(_user.id);
+  if(_user) await fetchProfile(_user.id);
   refreshUI();
 }
-
-db.auth.onAuthStateChange(async (_evt, session) => {
+db.auth.onAuthStateChange(async(_evt, session) => {
   _user = session?.user || null;
-  if (_user) await fetchProfile(_user.id);
-  else _profile = null;
+  if(_user) await fetchProfile(_user.id); else _profile = null;
   refreshUI();
 });
 
-/* ══════════════════════════════════════════
-   AUTH MODAL
-══════════════════════════════════════════ */
-let _registerMode = false;
-
-function openAuth() {
-  _registerMode = false;
-  syncAuthMode();
-  document.getElementById('inEmail').value    = '';
+/* ── AUTH MODAL ── */
+let _regMode = false;
+function openAuth(){
+  _regMode = false; syncAuthMode();
+  document.getElementById('inEmail').value = '';
   document.getElementById('inPassword').value = '';
   document.getElementById('authMsg').textContent = '';
-  document.getElementById('authMsg').className   = 'modal-msg';
+  document.getElementById('authMsg').className = 'modal-msg';
   openModal('authModal');
 }
-
-function syncAuthMode() {
-  document.getElementById('authTitle').textContent     = _registerMode ? 'Tạo tài khoản' : 'Đăng nhập';
-  document.getElementById('btnAuthSubmit').textContent = _registerMode ? 'Đăng ký' : 'Đăng nhập';
-  document.getElementById('authSwitch').textContent    = _registerMode ? 'Đã có tài khoản? Đăng nhập' : 'Chưa có tài khoản? Đăng ký';
+function syncAuthMode(){
+  document.getElementById('authTitle').textContent     = _regMode ? 'Tạo tài khoản' : 'Đăng nhập';
+  document.getElementById('btnAuthSubmit').textContent = _regMode ? 'Đăng ký'        : 'Đăng nhập';
+  document.getElementById('authSwitch').textContent    = _regMode ? 'Đã có tài khoản? Đăng nhập' : 'Chưa có tài khoản? Đăng ký';
 }
-
-document.getElementById('authSwitch').addEventListener('click', () => {
-  _registerMode = !_registerMode;
-  syncAuthMode();
-  document.getElementById('authMsg').textContent = '';
-});
-
+document.getElementById('authSwitch').addEventListener('click',() => { _regMode=!_regMode; syncAuthMode(); document.getElementById('authMsg').textContent=''; });
 document.getElementById('btnLogin').addEventListener('click', openAuth);
-
-document.getElementById('btnAuthSubmit').addEventListener('click', async () => {
+document.getElementById('btnAuthSubmit').addEventListener('click', async() => {
   const email = document.getElementById('inEmail').value.trim();
   const pass  = document.getElementById('inPassword').value;
   const msgEl = document.getElementById('authMsg');
-
-  if (!email || !pass) { msgEl.textContent = 'Nhập email và mật khẩu.'; msgEl.className = 'modal-msg err'; return; }
-  if (pass.length < 6) { msgEl.textContent = 'Mật khẩu ít nhất 6 ký tự.'; msgEl.className = 'modal-msg err'; return; }
-
+  if(!email||!pass){ msgEl.textContent='Nhập email và mật khẩu.'; msgEl.className='modal-msg err'; return; }
+  if(pass.length<6){ msgEl.textContent='Mật khẩu ít nhất 6 ký tự.'; msgEl.className='modal-msg err'; return; }
   const btn = document.getElementById('btnAuthSubmit');
-  btn.disabled = true; btn.textContent = 'Đang xử lý...';
-  msgEl.textContent = ''; msgEl.className = 'modal-msg';
-
-  try {
-    if (_registerMode) {
-      const { error } = await db.auth.signUp({ email, password: pass });
-      if (error) throw error;
-      msgEl.textContent = '✓ Đăng ký thành công! Kiểm tra email xác nhận (nếu Supabase yêu cầu).';
-      msgEl.className = 'modal-msg ok';
+  btn.disabled=true; btn.textContent='Đang xử lý...';
+  msgEl.textContent=''; msgEl.className='modal-msg';
+  try{
+    if(_regMode){
+      const { error } = await db.auth.signUp({ email, password:pass });
+      if(error) throw error;
+      msgEl.textContent='✓ Đăng ký thành công! Kiểm tra email xác nhận.';
+      msgEl.className='modal-msg ok';
       setTimeout(() => closeModal('authModal'), 2000);
     } else {
-      const { error } = await db.auth.signInWithPassword({ email, password: pass });
-      if (error) throw error;
-      toast('✓ Đăng nhập thành công!', 'ok');
+      const { error } = await db.auth.signInWithPassword({ email, password:pass });
+      if(error) throw error;
+      toast('✓ Đăng nhập thành công!','ok');
       closeModal('authModal');
     }
-  } catch(e) {
-    msgEl.textContent = e.message || 'Lỗi xác thực. Thử lại.';
+  } catch(e){
+    msgEl.textContent = e.message||'Lỗi xác thực. Thử lại.';
     msgEl.className = 'modal-msg err';
-  } finally {
-    btn.disabled = false;
-    syncAuthMode();
-  }
+  } finally { btn.disabled=false; syncAuthMode(); }
 });
+document.getElementById('btnLogout').addEventListener('click', async() => { await db.auth.signOut(); toast('Đã đăng xuất.'); });
 
-/* ══════════════════════════════════════════
-   LOGOUT
-══════════════════════════════════════════ */
-document.getElementById('btnLogout').addEventListener('click', async () => {
-  await db.auth.signOut();
-  toast('Đã đăng xuất.');
-});
-
-/* ══════════════════════════════════════════
-   UPGRADE MODAL
-══════════════════════════════════════════ */
-function openUpgrade(plan='pro') {
-  if (!_user) { openAuth(); return; }
-  document.getElementById('upgradeEmail').textContent = _user.email || '';
-  const desc = plan === 'lifetime'
+/* ── UPGRADE ── */
+function openUpgrade(plan='pro'){
+  if(!_user){ openAuth(); return; }
+  document.getElementById('upgradeEmail').textContent = _user.email||'';
+  document.getElementById('upgradeDesc').textContent = plan==='lifetime'
     ? '🔥 Lifetime — 300.000đ cho 6 tháng. Liên hệ Admin để kích hoạt.'
     : '⭐ Pro — 90.000đ/tháng. Liên hệ Admin để kích hoạt sau khi thanh toán.';
-  document.getElementById('upgradeDesc').textContent = desc;
   openModal('upgradeModal');
 }
+document.getElementById('btnNavUpgrade').addEventListener('click',() => openUpgrade());
 
-document.getElementById('btnUpgrade').addEventListener('click', () => openUpgrade());
-
-/* ══════════════════════════════════════════
-   LOAD APPS
-══════════════════════════════════════════ */
+/* ── LOAD APPS ── */
 let _apps = [];
-
-async function loadApps() {
-  const statusBox = document.getElementById('statusBox');
-  statusBox.textContent = 'Đang tải danh sách ứng dụng...';
-  statusBox.className = 'status';
-  statusBox.classList.remove('hidden');
-
-  try {
+async function loadApps(){
+  const sb = document.getElementById('statusBox');
+  sb.textContent='Đang tải danh sách ứng dụng...'; sb.className='status'; sb.classList.remove('hidden');
+  try{
     const { data, error } = await db.from('apps').select('*').order('id').limit(20);
-    if (error) throw error;
-
+    if(error) throw error;
     _apps = Array.isArray(data) ? data : [];
-    statusBox.classList.add('hidden');
+    sb.classList.add('hidden');
     document.getElementById('appCount').textContent = _apps.length + ' ứng dụng';
     renderApps();
-  } catch(e) {
-    statusBox.textContent = 'Không tải được dữ liệu: ' + (e.message || 'Kiểm tra Supabase.');
-    statusBox.className = 'status error';
+  } catch(e){
+    sb.textContent='Không tải được dữ liệu: '+(e.message||'Kiểm tra Supabase.');
+    sb.className='status error';
     renderEmptySlots(5);
   }
 }
 
-function renderApps() {
+function renderApps(){
   const grid = document.getElementById('appGrid');
-  grid.innerHTML = '';
-  const isPro = _profile?.tier === 'pro' || _profile?.tier === 'lifetime';
-  if (!_apps.length) { renderEmptySlots(5); return; }
-  _apps.forEach((app, i) => grid.appendChild(buildCard(app, i, isPro)));
+  grid.innerHTML='';
+  const isPro = _profile?.tier==='pro'||_profile?.tier==='lifetime';
+  if(!_apps.length){ renderEmptySlots(5); return; }
+  _apps.forEach((app,i) => grid.appendChild(buildCard(app,i,isPro)));
 }
 
-function renderAppButtons(isPro) {
-  document.querySelectorAll('.download-btn[data-app-id]').forEach(btn => {
-    const reqPro = btn.dataset.reqPro === '1';
-    const hasIPA = btn.dataset.ipa && btn.dataset.ipa !== 'null';
-    if (!hasIPA) return;
-    if (reqPro && !isPro) {
-      btn.textContent = '🔒 Chỉ Pro';
-      btn.className   = 'download-btn';
-      btn.disabled    = false;
-    } else {
-      btn.textContent = '⬇ Tải IPA';
-      btn.className   = 'download-btn' + (isPro ? ' gold-btn' : '');
-      btn.disabled    = false;
-    }
+function renderAppButtons(isPro){
+  document.querySelectorAll('.dl-btn[data-app-id]').forEach(btn => {
+    const reqPro = btn.dataset.reqPro==='1';
+    const hasIPA = btn.dataset.ipa && btn.dataset.ipa!=='null';
+    if(!hasIPA) return;
+    if(reqPro&&!isPro){ btn.textContent='🔒 Chỉ Pro'; btn.className='dl-btn'; btn.disabled=false; }
+    else { btn.textContent='⬇ Tải IPA'; btn.className='dl-btn'+(isPro?' gold':''); btn.disabled=false; }
   });
 }
 
-function buildCard(app, idx, isPro) {
+function isURL(v){ try{ const u=new URL(v); return u.protocol==='https:'||u.protocol==='http:'; } catch{ return false; } }
+
+function buildCard(app, idx, isPro){
   const card = document.createElement('article');
-  card.className = 'app-card';
+  card.className='app-card';
   const reqPro = !!app.pro_only;
+  if(reqPro){ card.classList.add('pro-locked'); const b=document.createElement('div'); b.className='pro-lock-banner'; b.textContent='⭐ PRO'; card.appendChild(b); }
 
-  if (reqPro) {
-    card.classList.add('pro-locked');
-    const banner = document.createElement('div');
-    banner.className = 'pro-lock-banner';
-    banner.textContent = '⭐ PRO';
-    card.appendChild(banner);
-  }
+  const icon = document.createElement('div'); icon.className='app-icon';
+  if(app.icon&&isURL(app.icon)){ const img=document.createElement('img'); img.src=app.icon; img.alt=app.name||'icon'; img.loading='lazy'; img.onerror=()=>{ icon.innerHTML='📦'; }; icon.appendChild(img); }
+  else icon.textContent='📦';
 
-  const iconBox = document.createElement('div');
-  iconBox.className = 'app-icon';
-  if (app.icon && isURL(app.icon)) {
-    const img = document.createElement('img');
-    img.src = app.icon; img.alt = app.name || 'icon'; img.loading = 'lazy';
-    img.onerror = () => { iconBox.innerHTML = '📦'; };
-    iconBox.appendChild(img);
-  } else { iconBox.textContent = '📦'; }
+  const name = document.createElement('h3'); name.textContent=app.name||`Ứng dụng ${idx+1}`;
+  const desc = document.createElement('p'); desc.className='app-desc'; desc.textContent=app.desc||app.description||'Ứng dụng IPA phát triển bởi GuniOS.';
+  const meta = document.createElement('div'); meta.className='app-meta';
+  meta.innerHTML=`<span>v${app.version||'N/A'}</span><span>${app.size||'N/A'}</span>`;
+  if(reqPro) meta.innerHTML+=`<span style="color:var(--gold)">⭐ Pro only</span>`;
 
-  const name = document.createElement('h3');
-  name.textContent = app.name || `Ứng dụng ${idx + 1}`;
+  const btn = document.createElement('button'); btn.className='dl-btn';
+  btn.dataset.appId=app.id||idx; btn.dataset.reqPro=reqPro?'1':'0'; btn.dataset.ipa=app.ipa||'';
+  const hasIPA = app.ipa&&isURL(app.ipa);
+  if(!hasIPA){ btn.textContent='Chưa khả dụng'; btn.disabled=true; }
+  else if(reqPro&&!isPro){ btn.textContent='🔒 Chỉ Pro'; }
+  else { btn.textContent='⬇ Tải IPA'; if(isPro) btn.classList.add('gold'); }
+  btn.addEventListener('click',() => handleDownload(app,reqPro,isPro));
 
-  const desc = document.createElement('p');
-  desc.className = 'app-desc';
-  desc.textContent = app.desc || app.description || 'Ứng dụng IPA phát triển bởi GuniOS.';
-
-  const meta = document.createElement('div');
-  meta.className = 'app-meta';
-  meta.innerHTML = `<span>v${app.version || 'N/A'}</span><span>${app.size || 'N/A'}</span>`;
-  if (reqPro) meta.innerHTML += `<span style="color:var(--gold)">⭐ Pro only</span>`;
-
-  const btn = document.createElement('button');
-  btn.className   = 'download-btn';
-  btn.dataset.appId  = app.id || idx;
-  btn.dataset.reqPro = reqPro ? '1' : '0';
-  btn.dataset.ipa    = app.ipa || '';
-
-  const hasIPA = app.ipa && isURL(app.ipa);
-  if (!hasIPA) {
-    btn.textContent = 'Chưa khả dụng';
-    btn.disabled = true;
-  } else if (reqPro && !isPro) {
-    btn.textContent = '🔒 Chỉ Pro';
-  } else {
-    btn.textContent = '⬇ Tải IPA';
-    if (isPro) btn.classList.add('gold-btn');
-  }
-
-  btn.addEventListener('click', () => handleDownload(app, reqPro, isPro));
-  card.append(iconBox, name, desc, meta, btn);
-  return card;
+  card.append(icon,name,desc,meta,btn); return card;
 }
 
-function renderEmptySlots(n) {
-  const grid = document.getElementById('appGrid');
-  for (let i = 0; i < n; i++) {
-    const card = document.createElement('article');
-    card.className = 'app-card';
-    card.innerHTML = `
-      <div class="app-icon">+</div>
-      <h3>Ứng dụng ${i+1}</h3>
-      <p class="app-desc" style="color:var(--muted)">Vị trí đang chờ cập nhật.</p>
-      <div class="app-meta">Chưa có dữ liệu</div>
-      <button class="download-btn" disabled>Chưa khả dụng</button>`;
-    grid.appendChild(card);
+function renderEmptySlots(n){
+  const grid=document.getElementById('appGrid');
+  for(let i=0;i<n;i++){
+    const c=document.createElement('article'); c.className='app-card';
+    c.innerHTML=`<div class="app-icon">+</div><h3>Ứng dụng ${i+1}</h3><p class="app-desc" style="color:var(--muted)">Vị trí đang chờ cập nhật.</p><div class="app-meta">Chưa có dữ liệu</div><button class="dl-btn" disabled>Chưa khả dụng</button>`;
+    grid.appendChild(c);
   }
 }
 
-function isURL(v) {
-  try { const u = new URL(v); return u.protocol === 'https:' || u.protocol === 'http:'; }
-  catch { return false; }
-}
-
-/* ══════════════════════════════════════════
-   DOWNLOAD FLOW
-══════════════════════════════════════════ */
-async function handleDownload(app, reqPro, isPro) {
+/* ── DOWNLOAD ── */
+async function handleDownload(app, reqPro, isPro){
   const { data } = await db.auth.getSession();
-  _user = data.session?.user || null;
-  if (!_user) { toast('Đăng nhập để tải IPA.', 'err'); openAuth(); return; }
-
+  _user = data.session?.user||null;
+  if(!_user){ toast('Đăng nhập để tải IPA.','err'); openAuth(); return; }
   await fetchProfile(_user.id);
-  const isProNow = _profile?.tier === 'pro' || _profile?.tier === 'lifetime';
-
-  if (reqPro && !isProNow) { openUpgrade(); return; }
-  if (!app.ipa || !isURL(app.ipa)) { toast('Ứng dụng này chưa có link IPA.', 'err'); return; }
-
+  const isProNow = _profile?.tier==='pro'||_profile?.tier==='lifetime';
+  if(reqPro&&!isProNow){ openUpgrade(); return; }
+  if(!app.ipa||!isURL(app.ipa)){ toast('Ứng dụng này chưa có link IPA.','err'); return; }
   _pendingIPA = app.ipa;
   openModal('dlModal');
 }
-
-document.getElementById('btnConfirmDL').addEventListener('click', async () => {
-  if (!_pendingIPA) return;
+document.getElementById('btnConfirmDL').addEventListener('click', async() => {
+  if(!_pendingIPA) return;
   const { data } = await db.auth.getSession();
-  if (!data.session) {
-    _pendingIPA = null; closeModal('dlModal');
-    toast('Phiên hết hạn. Đăng nhập lại.', 'err'); openAuth(); return;
-  }
-  const url = _pendingIPA;
-  _pendingIPA = null; closeModal('dlModal');
+  if(!data.session){ _pendingIPA=null; closeModal('dlModal'); toast('Phiên hết hạn. Đăng nhập lại.','err'); openAuth(); return; }
+  const url=_pendingIPA; _pendingIPA=null; closeModal('dlModal');
   window.location.assign(url);
 });
 
-/* ══════════════════════════════════════════
-   POLICIES
-══════════════════════════════════════════ */
+/* ── POLICIES ── */
 const POLICIES = {
-  privacy: {
-    title: 'Chính sách quyền riêng tư',
-    content: `
-      <p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
-      <h4>1. Thông tin được xử lý</h4>
-      <p>GuniOS dùng Supabase Auth để quản lý tài khoản. Email và dữ liệu xác thực xử lý qua Supabase.</p>
-      <h4>2. Mục đích sử dụng</h4>
-      <ul><li>Đăng ký và xác thực tài khoản</li><li>Quản lý phiên đăng nhập</li><li>Kiểm soát quyền tải ứng dụng</li><li>Phân biệt gói Free / Pro</li></ul>
-      <h4>3. Lưu trữ dữ liệu</h4>
-      <p>Dữ liệu tài khoản xử lý qua cơ sở hạ tầng Supabase. GuniOS không lưu mật khẩu trực tiếp.</p>
-      <h4>4. Chia sẻ thông tin</h4>
-      <p>GuniOS không bán thông tin cá nhân.</p>
-      <h4>5. Liên hệ</h4>
-      <p>Admin: <a href="https://t.me/gunparh" target="_blank">@gunparh</a></p>`
+  privacy:{
+    title:'Chính sách quyền riêng tư',
+    content:`<p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
+    <h4>1. Thông tin được xử lý</h4><p>GuniOS dùng Supabase Auth để quản lý tài khoản. Email và dữ liệu xác thực xử lý qua Supabase.</p>
+    <h4>2. Mục đích sử dụng</h4><ul><li>Đăng ký và xác thực tài khoản</li><li>Quản lý phiên đăng nhập</li><li>Kiểm soát quyền tải ứng dụng</li><li>Phân biệt gói Free / Pro</li></ul>
+    <h4>3. Lưu trữ dữ liệu</h4><p>Dữ liệu tài khoản xử lý qua cơ sở hạ tầng Supabase. GuniOS không lưu mật khẩu trực tiếp.</p>
+    <h4>4. Chia sẻ thông tin</h4><p>GuniOS không bán thông tin cá nhân.</p>
+    <h4>5. Liên hệ</h4><p>Admin: <a href="https://t.me/gunparh" target="_blank">@gunparh</a></p>`
   },
-  safety: {
-    title: 'Chính sách an toàn & điều khoản sử dụng',
-    content: `
-      <p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
-      <h4>1. Phạm vi dịch vụ</h4>
-      <p>GuniOS phân phối ứng dụng IPA do GuniOS phát triển hoặc được phép phân phối.</p>
-      <h4>2. Trách nhiệm người dùng</h4>
-      <ul><li>Sử dụng đúng mục đích</li><li>Không dùng vào mục đích trái pháp luật</li><li>Không khai thác hoặc phá hoại hệ thống</li><li>Kiểm tra khả năng tương thích thiết bị trước khi cài đặt</li></ul>
-      <h4>3. Gói Pro & hoàn tiền</h4>
-      <p>Thanh toán qua Admin. Không hoàn tiền sau khi tài khoản đã được kích hoạt Pro, trừ trường hợp lỗi từ phía GuniOS.</p>
-      <h4>4. Báo cáo lỗi</h4>
-      <p>Phản hồi qua Admin <a href="https://t.me/gunparh" target="_blank">@gunparh</a>.</p>
-      <h4>5. Giới hạn trách nhiệm</h4>
-      <p>GuniOS không chịu trách nhiệm với thiệt hại từ việc dùng sai mục đích hoặc thiết bị không tương thích.</p>
-      <h4>6. Liên hệ</h4>
-      <p>Admin: <a href="https://t.me/gunparh" target="_blank">@gunparh</a></p>`
+  safety:{
+    title:'Chính sách an toàn & điều khoản sử dụng',
+    content:`<p><strong>Ngày cập nhật:</strong> 09/11/2026</p>
+    <h4>1. Phạm vi dịch vụ</h4><p>GuniOS phân phối ứng dụng IPA do GuniOS phát triển hoặc được phép phân phối.</p>
+    <h4>2. Trách nhiệm người dùng</h4><ul><li>Sử dụng đúng mục đích</li><li>Không dùng vào mục đích trái pháp luật</li><li>Không khai thác hoặc phá hoại hệ thống</li><li>Kiểm tra khả năng tương thích thiết bị trước khi cài đặt</li></ul>
+    <h4>3. Gói Pro & hoàn tiền</h4><p>Thanh toán qua Admin. Không hoàn tiền sau khi tài khoản đã được kích hoạt Pro, trừ trường hợp lỗi từ phía GuniOS.</p>
+    <h4>4. Báo cáo lỗi</h4><p>Phản hồi qua Admin <a href="https://t.me/gunparh" target="_blank">@gunparh</a>.</p>
+    <h4>5. Giới hạn trách nhiệm</h4><p>GuniOS không chịu trách nhiệm với thiệt hại từ việc dùng sai mục đích hoặc thiết bị không tương thích.</p>
+    <h4>6. Liên hệ</h4><p>Admin: <a href="https://t.me/gunparh" target="_blank">@gunparh</a></p>`
   }
 };
+function openPolicy(type){ const p=POLICIES[type]; if(!p) return; document.getElementById('policyTitle').textContent=p.title; document.getElementById('policyContent').innerHTML=p.content; openModal('policyModal'); }
 
-function openPolicy(type) {
-  const p = POLICIES[type]; if (!p) return;
-  document.getElementById('policyTitle').textContent  = p.title;
-  document.getElementById('policyContent').innerHTML  = p.content;
-  openModal('policyModal');
-}
-
-/* ══════════════════════════════════════════
-   BOOT
-══════════════════════════════════════════ */
-(async () => {
-  await initSession();
-  await loadApps();
-})();
+/* ── BOOT ── */
+(async()=>{ await initSession(); await loadApps(); })();
 </script>
 </body>
 </html>
