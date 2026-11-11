@@ -27,12 +27,9 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 button,input{font:inherit}
 button{cursor:pointer}
 a{color:var(--primary);text-decoration:none}
-
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--panel)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-
 .container{width:min(1100px,92%);margin:auto}
 .hidden{display:none!important}
 
@@ -63,6 +60,35 @@ header{
 .btn-sm{padding:7px 12px;font-size:12px}
 .btn-danger{color:#fff;background:#3d1515;border:1px solid #6b2020}
 
+/* ── USER PROFILE CARD ── */
+#userCard{
+  background:linear-gradient(135deg,#111a2b,#0e1626);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px 24px;
+  margin:24px 0 10px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.user-card-avatar{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,#795cff,#536fff);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#fff;flex-shrink:0;
+  box-shadow:0 0 18px #7955ff44;
+}
+.user-card-info{flex:1;min-width:0}
+.user-card-email{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.user-card-tier{font-size:12px;font-weight:800;padding:3px 12px;border-radius:20px}
+.user-card-tier.free{background:#1a1f35;color:#8899cc;border:1px solid var(--border)}
+.user-card-tier.pro{background:linear-gradient(90deg,#3b2a00,#4a3400);color:var(--gold);border:1px solid #6b4e00}
+.user-card-tier.lifetime{background:linear-gradient(90deg,#2a0a00,#3d1500);color:#ff9f4a;border:1px solid #7a3200}
+.user-card-since{font-size:11px;color:var(--muted)}
+.user-card-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
 /* ── HERO ── */
 .hero{text-align:center;padding:70px 15px 50px}
 .hero-tag{display:inline-block;color:#aa9aff;background:#211b43;border:1px solid #41347c;border-radius:30px;padding:7px 14px;font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:20px}
@@ -92,6 +118,7 @@ header{
 .pricing-features li::before{content:"✓";color:var(--success);font-weight:800;flex-shrink:0}
 .pricing-features li.no::before{content:"✗";color:var(--error)}
 .pricing-features li.no{color:var(--muted)}
+.feature-highlight{color:#a8f0c6;font-weight:700}
 
 /* ── STORE ── */
 .store-section{padding:20px 0 60px}
@@ -172,6 +199,9 @@ footer strong{color:#a18cff}
   .pricing-grid{grid-template-columns:1fr}
   .modal{padding:20px}
   .hero-actions{flex-direction:column;align-items:center}
+  #userCard{flex-direction:column;align-items:flex-start;gap:14px}
+  .user-card-actions{width:100%}
+  .user-card-actions .btn{flex:1}
 }
 </style>
 </head>
@@ -205,6 +235,22 @@ footer strong{color:#a18cff}
     </div>
   </section>
 
+  <!-- USER PROFILE CARD — shown after login -->
+  <div id="userCard" class="hidden">
+    <div class="user-card-avatar" id="userCardAvatar">?</div>
+    <div class="user-card-info">
+      <div class="user-card-email" id="userCardEmail">—</div>
+      <div class="user-card-meta">
+        <span class="user-card-tier free" id="userCardTier">FREE</span>
+        <span class="user-card-since" id="userCardSince"></span>
+      </div>
+    </div>
+    <div class="user-card-actions">
+      <button id="cardBtnUpgrade" class="btn btn-gold btn-sm hidden" onclick="openUpgrade()">⭐ Nâng cấp Pro</button>
+      <button class="btn btn-secondary btn-sm" onclick="db.auth.signOut()">Đăng xuất</button>
+    </div>
+  </div>
+
   <!-- PRICING -->
   <section class="pricing-section" id="pricing">
     <div class="section-title">
@@ -216,7 +262,7 @@ footer strong{color:#a18cff}
       <!-- FREE -->
       <div class="pricing-card">
         <div class="pricing-name">🔓 Free</div>
-        <div class="pricing-price">$0 <span>/ mãi mãi</span></div>
+        <div class="pricing-price">0đ <span>/ mãi mãi</span></div>
         <div class="pricing-desc">Dùng thử các ứng dụng cơ bản, không cần thẻ.</div>
         <ul class="pricing-features">
           <li class="ok">Tải ứng dụng Free tier</li>
@@ -232,31 +278,33 @@ footer strong{color:#a18cff}
       <div class="pricing-card featured">
         <div class="pricing-badge">PHỔ BIẾN NHẤT</div>
         <div class="pricing-name">⭐ Pro</div>
-        <div class="pricing-price">$4.99 <span>/ tháng</span></div>
+        <div class="pricing-price">90.000đ <span>/ tháng</span></div>
         <div class="pricing-desc">Mở khoá toàn bộ. Dùng không giới hạn trên cả website và iVibe Studio app.</div>
         <ul class="pricing-features">
           <li class="ok">Tất cả ứng dụng Free + Pro</li>
           <li class="ok">iVibe Studio AI: không giới hạn</li>
-          <li class="ok">Toàn bộ agents & skills</li>
-          <li class="ok">Build & terminal không bị chặn</li>
+          <li class="ok">Toàn bộ agents &amp; skills</li>
+          <li class="ok">Build &amp; terminal không bị chặn</li>
+          <li class="ok"><span class="feature-highlight">LaunchDaemon chạy ngầm 2h</span> cho prompt phức tạp</li>
           <li class="ok">Hỗ trợ ưu tiên qua Telegram</li>
           <li class="ok">Cập nhật sớm nhất</li>
         </ul>
-        <button id="btnBuyPro" class="btn btn-gold" style="width:100%" onclick="openUpgrade()">Nâng cấp Pro — $4.99/tháng</button>
+        <button id="btnBuyPro" class="btn btn-gold" style="width:100%" onclick="openUpgrade()">Nâng cấp Pro — 90.000đ/tháng</button>
       </div>
 
       <!-- LIFETIME -->
       <div class="pricing-card">
         <div class="pricing-name">🔥 Lifetime</div>
-        <div class="pricing-price">$19.99 <span>/ một lần</span></div>
-        <div class="pricing-desc">Trả một lần, dùng mãi mãi. Không gia hạn hàng tháng.</div>
+        <div class="pricing-price">300.000đ <span>/ 6 tháng</span></div>
+        <div class="pricing-desc">Trả một lần, dùng 6 tháng liên tục. Không cần gia hạn hàng tháng.</div>
         <ul class="pricing-features">
           <li class="ok">Tất cả quyền lợi Pro</li>
-          <li class="ok">Không cần gia hạn</li>
+          <li class="ok"><span class="feature-highlight">LaunchDaemon chạy ngầm 2h</span> cho prompt phức tạp</li>
+          <li class="ok">Không cần gia hạn 6 tháng</li>
           <li class="ok">Ưu tiên tính năng mới</li>
           <li class="ok">Badge Lifetime trong app</li>
         </ul>
-        <button class="btn btn-primary" style="width:100%" onclick="openUpgrade('lifetime')">Mua Lifetime — $19.99</button>
+        <button class="btn btn-primary" style="width:100%" onclick="openUpgrade('lifetime')">Mua Lifetime — 300.000đ / 6 tháng</button>
       </div>
 
     </div>
@@ -317,6 +365,15 @@ footer strong{color:#a18cff}
   <div class="modal">
     <h3>⭐ Nâng cấp Pro</h3>
     <p id="upgradeDesc">Mở khoá toàn bộ tính năng trên website và iVibe Studio app.</p>
+
+    <!-- LaunchDaemon highlight box -->
+    <div style="background:linear-gradient(135deg,#0d1f0d,#0a1a0a);border:1px solid #2a4a2a;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:800;color:#4ade80;margin-bottom:6px;letter-spacing:.5px">🚀 TÍNH NĂNG ĐỘC QUYỀN PRO</div>
+      <div style="font-size:13px;color:#c8f0c8;line-height:1.7">
+        <strong>LaunchDaemon chạy ngầm 2h</strong> — Hỗ trợ các prompt phức tạp, nặng tải hoạt động liên tục trong nền mà không bị hệ thống kill tiến trình. Lý tưởng cho automation, build dài và AI pipeline.
+      </div>
+    </div>
+
     <div style="background:#0b1220;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
       <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Liên hệ Admin để thanh toán và kích hoạt:</div>
       <a href="https://t.me/gunparh" target="_blank" style="display:block;text-align:center;padding:12px;background:#1a3a5c;border:1px solid #2a5080;border-radius:10px;color:#5ba3f5;font-weight:700;font-size:14px">
@@ -368,8 +425,8 @@ const db = window.supabase.createClient(SB_URL, SB_KEY, {
 /* ══════════════════════════════════════════
    STATE
 ══════════════════════════════════════════ */
-let _user    = null;   // supabase user object
-let _profile = null;   // row from profiles table { tier, display_name, ... }
+let _user    = null;
+let _profile = null;
 let _pendingIPA = null;
 
 /* ══════════════════════════════════════════
@@ -390,7 +447,6 @@ function toast(msg, type='', dur=2800) {
 function openModal(id)  { document.getElementById(id).classList.add('show') }
 function closeModal(id) { document.getElementById(id).classList.remove('show') }
 
-// Close on backdrop click
 document.querySelectorAll('.modal-overlay').forEach(ov => {
   ov.addEventListener('click', e => {
     if (e.target === ov) {
@@ -399,6 +455,49 @@ document.querySelectorAll('.modal-overlay').forEach(ov => {
     }
   });
 });
+
+/* ══════════════════════════════════════════
+   USER CARD
+══════════════════════════════════════════ */
+function updateUserCard() {
+  const card = document.getElementById('userCard');
+  if (!_user) { card.classList.add('hidden'); return; }
+
+  card.classList.remove('hidden');
+
+  // Avatar letter
+  const letter = (_user.email || '?')[0].toUpperCase();
+  document.getElementById('userCardAvatar').textContent = letter;
+
+  // Email
+  document.getElementById('userCardEmail').textContent = _user.email || '—';
+
+  // Tier badge
+  const tierEl = document.getElementById('userCardTier');
+  const tier   = _profile?.tier || 'free';
+  if (tier === 'lifetime') {
+    tierEl.textContent  = '🔥 LIFETIME';
+    tierEl.className    = 'user-card-tier lifetime';
+  } else if (tier === 'pro') {
+    tierEl.textContent  = '⭐ PRO';
+    tierEl.className    = 'user-card-tier pro';
+  } else {
+    tierEl.textContent  = 'FREE';
+    tierEl.className    = 'user-card-tier free';
+  }
+
+  // Joined date from metadata
+  const created = _user.created_at;
+  if (created) {
+    const d = new Date(created);
+    document.getElementById('userCardSince').textContent =
+      'Thành viên từ ' + d.toLocaleDateString('vi-VN', {year:'numeric',month:'long'});
+  }
+
+  // Show upgrade button only for free users
+  const isPro = tier === 'pro' || tier === 'lifetime';
+  document.getElementById('cardBtnUpgrade').classList.toggle('hidden', isPro);
+}
 
 /* ══════════════════════════════════════════
    AUTH UI
@@ -427,7 +526,7 @@ function refreshUI() {
     }
   }
 
-  // Re-render store buttons based on new tier
+  updateUserCard();
   renderAppButtons(isPro);
 }
 
@@ -539,8 +638,8 @@ function openUpgrade(plan='pro') {
   if (!_user) { openAuth(); return; }
   document.getElementById('upgradeEmail').textContent = _user.email || '';
   const desc = plan === 'lifetime'
-    ? '🔥 Lifetime — $19.99 một lần, dùng mãi. Liên hệ Admin để kích hoạt.'
-    : '⭐ Pro — $4.99/tháng. Liên hệ Admin để kích hoạt sau khi thanh toán.';
+    ? '🔥 Lifetime — 300.000đ cho 6 tháng. Liên hệ Admin để kích hoạt.'
+    : '⭐ Pro — 90.000đ/tháng. Liên hệ Admin để kích hoạt sau khi thanh toán.';
   document.getElementById('upgradeDesc').textContent = desc;
   openModal('upgradeModal');
 }
@@ -564,10 +663,7 @@ async function loadApps() {
 
     _apps = Array.isArray(data) ? data : [];
     statusBox.classList.add('hidden');
-
-    document.getElementById('appCount').textContent =
-      _apps.length + ' ứng dụng';
-
+    document.getElementById('appCount').textContent = _apps.length + ' ứng dụng';
     renderApps();
   } catch(e) {
     statusBox.textContent = 'Không tải được dữ liệu: ' + (e.message || 'Kiểm tra Supabase.');
@@ -580,34 +676,23 @@ function renderApps() {
   const grid = document.getElementById('appGrid');
   grid.innerHTML = '';
   const isPro = _profile?.tier === 'pro' || _profile?.tier === 'lifetime';
-
-  if (!_apps.length) {
-    renderEmptySlots(5);
-    return;
-  }
-
-  _apps.forEach((app, i) => {
-    grid.appendChild(buildCard(app, i, isPro));
-  });
+  if (!_apps.length) { renderEmptySlots(5); return; }
+  _apps.forEach((app, i) => grid.appendChild(buildCard(app, i, isPro)));
 }
 
 function renderAppButtons(isPro) {
-  // Update only the download buttons without full re-render
   document.querySelectorAll('.download-btn[data-app-id]').forEach(btn => {
-    const appId  = btn.dataset.appId;
     const reqPro = btn.dataset.reqPro === '1';
     const hasIPA = btn.dataset.ipa && btn.dataset.ipa !== 'null';
-
     if (!hasIPA) return;
-
     if (reqPro && !isPro) {
-      btn.textContent  = '🔒 Chỉ Pro';
-      btn.className    = 'download-btn';
-      btn.disabled     = false;
+      btn.textContent = '🔒 Chỉ Pro';
+      btn.className   = 'download-btn';
+      btn.disabled    = false;
     } else {
-      btn.textContent  = isPro ? '⬇ Tải IPA' : '⬇ Tải IPA';
-      btn.className    = 'download-btn' + (isPro ? ' gold-btn' : '');
-      btn.disabled     = false;
+      btn.textContent = '⬇ Tải IPA';
+      btn.className   = 'download-btn' + (isPro ? ' gold-btn' : '');
+      btn.disabled    = false;
     }
   });
 }
@@ -615,8 +700,8 @@ function renderAppButtons(isPro) {
 function buildCard(app, idx, isPro) {
   const card = document.createElement('article');
   card.className = 'app-card';
-
   const reqPro = !!app.pro_only;
+
   if (reqPro) {
     card.classList.add('pro-locked');
     const banner = document.createElement('div');
@@ -625,7 +710,6 @@ function buildCard(app, idx, isPro) {
     card.appendChild(banner);
   }
 
-  // Icon
   const iconBox = document.createElement('div');
   iconBox.className = 'app-icon';
   if (app.icon && isURL(app.icon)) {
@@ -635,22 +719,18 @@ function buildCard(app, idx, isPro) {
     iconBox.appendChild(img);
   } else { iconBox.textContent = '📦'; }
 
-  // Name
   const name = document.createElement('h3');
   name.textContent = app.name || `Ứng dụng ${idx + 1}`;
 
-  // Desc
   const desc = document.createElement('p');
   desc.className = 'app-desc';
   desc.textContent = app.desc || app.description || 'Ứng dụng IPA phát triển bởi GuniOS.';
 
-  // Meta
   const meta = document.createElement('div');
   meta.className = 'app-meta';
   meta.innerHTML = `<span>v${app.version || 'N/A'}</span><span>${app.size || 'N/A'}</span>`;
   if (reqPro) meta.innerHTML += `<span style="color:var(--gold)">⭐ Pro only</span>`;
 
-  // Button
   const btn = document.createElement('button');
   btn.className   = 'download-btn';
   btn.dataset.appId  = app.id || idx;
@@ -658,19 +738,17 @@ function buildCard(app, idx, isPro) {
   btn.dataset.ipa    = app.ipa || '';
 
   const hasIPA = app.ipa && isURL(app.ipa);
-
   if (!hasIPA) {
     btn.textContent = 'Chưa khả dụng';
     btn.disabled = true;
   } else if (reqPro && !isPro) {
     btn.textContent = '🔒 Chỉ Pro';
   } else {
-    btn.textContent = isPro ? '⬇ Tải IPA' : '⬇ Tải IPA';
+    btn.textContent = '⬇ Tải IPA';
     if (isPro) btn.classList.add('gold-btn');
   }
 
   btn.addEventListener('click', () => handleDownload(app, reqPro, isPro));
-
   card.append(iconBox, name, desc, meta, btn);
   return card;
 }
@@ -699,24 +777,15 @@ function isURL(v) {
    DOWNLOAD FLOW
 ══════════════════════════════════════════ */
 async function handleDownload(app, reqPro, isPro) {
-  // Re-verify session
   const { data } = await db.auth.getSession();
   _user = data.session?.user || null;
   if (!_user) { toast('Đăng nhập để tải IPA.', 'err'); openAuth(); return; }
 
-  // Re-fetch profile to avoid stale cache
   await fetchProfile(_user.id);
   const isProNow = _profile?.tier === 'pro' || _profile?.tier === 'lifetime';
 
-  if (reqPro && !isProNow) {
-    openUpgrade();
-    return;
-  }
-
-  if (!app.ipa || !isURL(app.ipa)) {
-    toast('Ứng dụng này chưa có link IPA.', 'err');
-    return;
-  }
+  if (reqPro && !isProNow) { openUpgrade(); return; }
+  if (!app.ipa || !isURL(app.ipa)) { toast('Ứng dụng này chưa có link IPA.', 'err'); return; }
 
   _pendingIPA = app.ipa;
   openModal('dlModal');
@@ -724,20 +793,13 @@ async function handleDownload(app, reqPro, isPro) {
 
 document.getElementById('btnConfirmDL').addEventListener('click', async () => {
   if (!_pendingIPA) return;
-
-  // Final session check
   const { data } = await db.auth.getSession();
   if (!data.session) {
-    _pendingIPA = null;
-    closeModal('dlModal');
-    toast('Phiên hết hạn. Đăng nhập lại.', 'err');
-    openAuth();
-    return;
+    _pendingIPA = null; closeModal('dlModal');
+    toast('Phiên hết hạn. Đăng nhập lại.', 'err'); openAuth(); return;
   }
-
   const url = _pendingIPA;
-  _pendingIPA = null;
-  closeModal('dlModal');
+  _pendingIPA = null; closeModal('dlModal');
   window.location.assign(url);
 });
 
@@ -756,7 +818,7 @@ const POLICIES = {
       <h4>3. Lưu trữ dữ liệu</h4>
       <p>Dữ liệu tài khoản xử lý qua cơ sở hạ tầng Supabase. GuniOS không lưu mật khẩu trực tiếp.</p>
       <h4>4. Chia sẻ thông tin</h4>
-      <p>GuniOS không bán thông tin cá nhân. Dữ liệu có thể xử lý bởi nhà cung cấp dịch vụ cần thiết hoặc theo nghĩa vụ pháp lý.</p>
+      <p>GuniOS không bán thông tin cá nhân.</p>
       <h4>5. Liên hệ</h4>
       <p>Admin: <a href="https://t.me/gunparh" target="_blank">@gunparh</a></p>`
   },
